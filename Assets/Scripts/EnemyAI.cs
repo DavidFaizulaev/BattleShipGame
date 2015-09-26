@@ -10,10 +10,12 @@ public class EnemyAI : MonoBehaviour
 	public PlayerBoardManager myboard;
 
 	private Vector2 vc;
+    private ArrayList used_vectors;
 
 	void Start(){
 
 		myboard = myboard.GetComponent<PlayerBoardManager> ();
+        used_vectors = new ArrayList();
 	}
 
 	void Update ()
@@ -27,7 +29,12 @@ public class EnemyAI : MonoBehaviour
 	}
 	private void MakeMove ()
 	{
-		getRandomLocation ();
+        do
+        {
+            getRandomLocation();
+        } while (checkIfUsedVector() == false);
+        
+        used_vectors.Add(vc);
 		myboard.EnemyMove(vc);
 		Turn.EndTurn (true, false);
 	}
@@ -37,4 +44,19 @@ public class EnemyAI : MonoBehaviour
 		vc = new Vector2 (Random.Range (0, 10), Random.Range (0, 10));
 		Debug.Log ("random loc " + vc.x + "   " + vc.y);
 	}
+
+    private bool checkIfUsedVector()
+    {
+        bool is_valid = true;
+
+        foreach (Vector2 v in used_vectors)
+        {
+            if ((v.x == vc.x) && (v.y == vc.y)){
+                is_valid = false;
+                break;}
+        }
+
+        Debug.Log("checkValidVector ");
+        return is_valid;
+    }
 }
