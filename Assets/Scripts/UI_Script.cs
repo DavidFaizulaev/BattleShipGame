@@ -32,7 +32,7 @@ public class UI_Script : MonoBehaviour
         //check if input fields are empty
         if ((input_email.text != "") && (input_password.text != ""))
         {
-            Debug.Log("valid input");
+           // Debug.Log("valid input");
             fb_holder = new SC_FB_Holder();
             fb_holder.InitFB();
         }

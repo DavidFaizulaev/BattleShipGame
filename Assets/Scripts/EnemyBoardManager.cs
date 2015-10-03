@@ -61,11 +61,11 @@ public class EnemyBoardManager : MonoBehaviour {
 			initial_x = random_x_value;
 			last_placed_y = initial_y;
 			last_placed_x = random_x_value;
-			Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
+		//	Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
 			i++;
 		}
 
-		Debug.Log ("continuing creation of AI's ship");
+		//Debug.Log ("continuing creation of AI's ship");
 
 		//placing ship with 4 squars
 		while (i<ship_Size)
@@ -85,7 +85,7 @@ public class EnemyBoardManager : MonoBehaviour {
 				{
 					//location ok - increase counter
 					last_placed_x = random_x_value;
-					Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
+			//		Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
 					i++;
 				}
 			}
@@ -103,7 +103,7 @@ public class EnemyBoardManager : MonoBehaviour {
 				{
 					//location ok - increase counter
 					last_placed_y = random_y_value;
-					Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
+				//	Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
 					i++;
 				}
 			}
@@ -126,7 +126,7 @@ public class EnemyBoardManager : MonoBehaviour {
 				//move successful
 				//ship exits
 				//ship loc marked as hit
-				Debug.Log ("attack success");
+				//Debug.Log ("attack success");
 				all_buttons = this.GetComponentsInChildren<Button> ();
 				foreach (Button b in all_buttons) {
 					if ((b.GetComponent<ButtonInfo> ().position.x == btnPos.x) &&
@@ -152,7 +152,7 @@ public class EnemyBoardManager : MonoBehaviour {
 				}
 			} else {
 				//get button loc from vector and color grey - no ship
-				Debug.Log ("attack failed");
+				//Debug.Log ("attack failed");
 				all_buttons = this.GetComponentsInChildren<Button> ();
 				foreach (Button b in all_buttons) {
 					if ((b.GetComponent<ButtonInfo> ().position.x == btnPos.x) &&

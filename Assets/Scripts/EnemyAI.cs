@@ -42,7 +42,7 @@ public class EnemyAI : MonoBehaviour
 	private void getRandomLocation ()
 	{
 		vc = new Vector2 (Random.Range (0, 10), Random.Range (0, 10));
-		Debug.Log ("random loc " + vc.x + "   " + vc.y);
+		//Debug.Log ("random loc " + vc.x + "   " + vc.y);
 	}
 
     private bool checkIfUsedVector()
@@ -56,7 +56,7 @@ public class EnemyAI : MonoBehaviour
                 break;}
         }
 
-        Debug.Log("checkValidVector ");
+     //   Debug.Log("checkValidVector ");
         return is_valid;
     }
 }

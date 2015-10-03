@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEngine.UI; // we need This namespace in order to access UI elements within our script
 using System.Collections;
 
+// UI aid class to display the game instructions before the game begins.
 public class IntroUI : MonoBehaviour
 {
     private string intro_msg;
     public GameObject Intro_panel;
+    public Button exit_btn;
     public Text instrcs;
-
+    
     void Start()
     {
         intro_msg = "1. Place " + SgameInfo.max_number_of_ships + " battleships on your grid, when the largset ship size is of "
@@ -23,15 +25,24 @@ public class IntroUI : MonoBehaviour
 
         instrcs.text = intro_msg.ToString();
 
+        exit_btn.enabled = false;
+
         this.StartCoroutine(Wait());
     }
 
-    //coroutine to wait 10 seconds before starting
+    //coroutine to wait 12 seconds before starting
     private IEnumerator Wait()
     {
-        Debug.Log("waiting for 10 seconds before starting the level");
-        yield return new WaitForSeconds(10.0f);
+        Debug.Log("waiting for 12 seconds before starting the level");
+        yield return new WaitForSeconds(12.0f);
         Intro_panel.SetActive(false);
-        Debug.Log("finished waiting for 10 seconds before starting the level");
+        exit_btn.enabled = true;
+        Debug.Log("finished waiting for 12 seconds before starting the level");
+    }
+
+    public void QuitGamePress() //This function will be used on our "Exit Game" button
+    {
+        Debug.Log("ExitGamePress");
+        Application.Quit(); //This will quit our game.  
     }
 }

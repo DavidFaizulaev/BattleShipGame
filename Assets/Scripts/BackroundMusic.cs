@@ -3,14 +3,12 @@ using System.Collections;
 
 public class BackroundMusic : MonoBehaviour {
 
-	Object[] myMusic; // declare this as Object array
+	Object[] myMusic; // declare this as Object array, basically contains all music used in game.
 	
-	void Awake () {
-		myMusic = Resources.LoadAll("Music",typeof(AudioClip));
-		GetComponent<AudioSource>().clip = myMusic[0] as AudioClip;
-	}
-	
-	void Start (){
+	void Start ()
+    {
+        myMusic = Resources.LoadAll("Music", typeof(AudioClip));
+        GetComponent<AudioSource>().clip = myMusic[0] as AudioClip;
 		GetComponent<AudioSource>().Play(); 
 	}
 	

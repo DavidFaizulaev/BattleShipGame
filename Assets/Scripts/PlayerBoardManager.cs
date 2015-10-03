@@ -70,7 +70,7 @@ public class PlayerBoardManager : MonoBehaviour
             //move successful
             //ship exits
             //ship loc marked as hit
-            Debug.Log("attack success");
+          //  Debug.Log("attack success");
             all_buttons = this.GetComponentsInChildren<Button>();
             foreach (Button b in all_buttons)
             {
@@ -82,6 +82,7 @@ public class PlayerBoardManager : MonoBehaviour
                     {
                         //mark location as hit
                         b.image.color = new Color(Color.red.r, Color.red.g, Color.red.b, 1f);
+                      //  Turn.set_LastValidAttackCrods(vc);
                         hit_Counter++;
 
                         //if (hit_Counter == SgameInfo.max_Ship_Size)
@@ -100,7 +101,7 @@ public class PlayerBoardManager : MonoBehaviour
         else
         {
             //get button loc from vector and color grey - no ship
-            Debug.Log("attack failed");
+           // Debug.Log("attack failed");
             all_buttons = this.GetComponentsInChildren<Button>();
             foreach (Button b in all_buttons)
             {

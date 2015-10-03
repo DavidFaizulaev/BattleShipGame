@@ -48,7 +48,7 @@ public class BattleShip
     //placing a ship square in the received Vector 2 if ship does not exist in that location yet.
     public bool Set_Loc(Vector2 vc)
     {
-        Debug.Log("in set loc");
+       // Debug.Log("in set loc");
         bool s = true;
         bool res_val = false;
         bool check_res = false;
@@ -60,7 +60,7 @@ public class BattleShip
                 if ((ship_conf[i].GetCordLoc().x == vc.x) && (ship_conf[i].GetCordLoc().y == vc.y))
                 {
                     s = false;
-                    Debug.Log("ship in loc already exists");
+                 //   Debug.Log("ship in loc already exists");
                     res_val = false;
                 }
             }
@@ -77,7 +77,7 @@ public class BattleShip
                     if (cur_loc == ship_size)
                     { structure_complete = true; } //ship complete
 
-                    Debug.Log("new loc added to ship");
+                  //  Debug.Log("new loc added to ship");
                     res_val = true;
                 }
 
@@ -93,13 +93,13 @@ public class BattleShip
                         if (cur_loc == ship_size)
                         { structure_complete = true; } //ship complete
 
-                        Debug.Log("new loc added to ship");
+                     //   Debug.Log("new loc added to ship");
                         res_val = true;
                     }
 
                     else
                     {
-                        Debug.Log("loc out of bounds");
+                 //       Debug.Log("loc out of bounds");
                         res_val = false;
                     }
                 }    
@@ -107,7 +107,7 @@ public class BattleShip
         }
         else
         {
-            Debug.Log("ship already complete");
+         //   Debug.Log("ship already complete");
             res_val = false;
         }
 
@@ -123,17 +123,17 @@ public class BattleShip
             {
                 if (((ship_conf[i].GetCordLoc().x == vc.x) && (ship_conf[i].GetCordLoc().y == vc.y) && ship_conf[i].GetState() == false))
                 {
-                    Debug.Log("ship loc confirmed");
+                //    Debug.Log("ship loc confirmed");
                     ship_conf[i].Register_Hit();
                     return true; //hit made
                 }
             }
-            Debug.Log("ship loc not good");
+           // Debug.Log("ship loc not good");
             return false;
         }
         else
         {
-            Debug.Log("ship loc not good");
+           // Debug.Log("ship loc not good");
             return false;
         }
     }

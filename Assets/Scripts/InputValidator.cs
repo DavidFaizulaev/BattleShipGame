@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//class validates input both user and AI. To make sure that ship creation is done correctly.
 public class InputValidator
 {
     private Vector2 initial_vc;
@@ -71,7 +72,7 @@ public class InputValidator
         {
             min_max_y[1] = (int)initial_vc.y + 3;
         }
-        Debug.Log("successfully initialized first valid vector location");
+       // Debug.Log("successfully initialized first valid vector location");
     }
 
     //method checks if received vector values hold the min/max X & min/max Y values
@@ -86,7 +87,7 @@ public class InputValidator
                 if (((int)vc.y <= min_max_y[1]) && (((int)vc.y >= min_max_y[0])))
                 {
                     Update_MinMax(vc);
-                    Debug.Log("vector location valid");
+                //    Debug.Log("vector location valid");
                     res_val = true;
                 }
             }
@@ -95,7 +96,7 @@ public class InputValidator
                 if (((int)vc.x <= min_max_x[1]) && ((int)vc.x >= min_max_x[0]))
                 {
                     Update_MinMax(vc);
-                    Debug.Log("vector location valid");
+                //    Debug.Log("vector location valid");
                     res_val = true;
                 }
             }
