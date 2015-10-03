@@ -10,8 +10,10 @@ public class Multi_UI : MonoBehaviour
 {
     public GameObject MultiPanel;
     public GameObject MsgPanel;
+    public GameObject GamePanel;
+    public GameObject Intro_panel;
     public InputField username;
-    
+
     public Button connect_btn;
     public Text response_msg;
 
@@ -36,7 +38,23 @@ public class Multi_UI : MonoBehaviour
             Debug.Log("all good");
             response_msg.text = "Connecting to game server";
             MsgPanel.SetActive(true);
+            ConnStater.Set_login_ready(true, var_username);
+            this.StartCoroutine(Wait());
         }
+    }
+
+    //coroutine to wait 12 seconds before starting
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(7.0f);
+        if (ConnStater.Get_connection_status())
+        {
+            MsgPanel.SetActive(false);
+            MultiPanel.SetActive(false);
+            GamePanel.SetActive(true);
+            Intro_panel.SetActive(true);
+        }
+        
     }
 }
 

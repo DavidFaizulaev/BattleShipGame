@@ -3,8 +3,8 @@ using System.Collections;
 using System;
 using com.shephertz.app42.gaming.multiplayer.client.events;
 using com.shephertz.app42.gaming.multiplayer.client.command;
+using com.shephertz.app42.gaming.multiplayer.client.listener;
 using System.Collections.Generic;
-using MiniJSON;
 
 public class SC_Logic : MonoBehaviour {
 
@@ -12,18 +12,15 @@ public class SC_Logic : MonoBehaviour {
     private string secretKey = "37b40d5fc19109edd30a651ac6d424a2fcf4e088707953e5d1792efa43f4826c";
 	private string email = "@gmail.com";
 	private string userName = "";
-    private TextMesh guiText;
-	private string roomId = "";
+    private string roomId = "";
 	private List<string> rooms;
 	private string opponentName = "";
 
 	private bool isMyTurn = false;
 
-
 	void OnEnable()
 	{
-			SC_Listener_App42.onCreatedUserApp42 += onCreatedUserApp42;
-			SC_Listener_App42.OnExceptionFromApp42 += OnExceptionFromApp42;
+            SC_Listener_App42.OnExceptionFromApp42 += OnExceptionFromApp42;
 		
 			SC_Listener_AppWarp.onConnectToAppWarp += onConnectToAppWarp;
 			SC_Listener_AppWarp.onDisconnectFromAppWarp += onDisconnectFromAppWarp;
@@ -35,14 +32,12 @@ public class SC_Logic : MonoBehaviour {
 			SC_Listener_AppWarp.OnCreateRoomDone += OnCreateRoomDone;
 			SC_Listener_AppWarp.onGetLiveRoomInfo += OnGetLiveRoomInfo;
 			SC_Listener_AppWarp.OnSendPrivateUpdate += OnSendPrivateUpdate;
-			SC_Listener_AppWarp.OnSendPrivateChat += OnSendPrivateChat;
 			SC_Listener_AppWarp.OnStartGameDone += OnStartGameDone;
 			SC_Listener_AppWarp.OnStopGameDone += OnStopGameDone;
 			SC_Listener_AppWarp.OnRoomCreated += OnRoomCreated;
 			SC_Listener_AppWarp.OnUserJoinRoom += OnUserJoinRoom;
 			SC_Listener_AppWarp.OnUserLeftRoom += OnUserLeftRoom;
 			SC_Listener_AppWarp.OnPrivateUpdateReceived += OnPrivateUpdateReceived;
-			SC_Listener_AppWarp.OnPrivateChatReceived += OnPrivateChatReceived;
 			SC_Listener_AppWarp.OnGameStarted += OnGameStarted;
 			SC_Listener_AppWarp.OnGameStopped += OnGameStopped;
 			SC_Listener_AppWarp.OnSendMove += OnSendMove;
@@ -51,7 +46,6 @@ public class SC_Logic : MonoBehaviour {
 		
 	void OnDisable()
 	{
-		SC_Listener_App42.onCreatedUserApp42 -= onCreatedUserApp42;
 		SC_Listener_App42.OnExceptionFromApp42 -= OnExceptionFromApp42;
 		
 		SC_Listener_App42.OnExceptionFromApp42 -= OnExceptionFromApp42;
@@ -65,115 +59,62 @@ public class SC_Logic : MonoBehaviour {
 		SC_Listener_AppWarp.OnCreateRoomDone -= OnCreateRoomDone;
 		SC_Listener_AppWarp.onGetLiveRoomInfo -= OnGetLiveRoomInfo;
 		SC_Listener_AppWarp.OnSendPrivateUpdate -= OnSendPrivateUpdate;
-		SC_Listener_AppWarp.OnSendPrivateChat -= OnSendPrivateChat;
 		SC_Listener_AppWarp.OnStartGameDone -= OnStartGameDone;
 		SC_Listener_AppWarp.OnStopGameDone -= OnStopGameDone;
 		SC_Listener_AppWarp.OnRoomCreated -= OnRoomCreated;
 		SC_Listener_AppWarp.OnUserJoinRoom -= OnUserJoinRoom;
 		SC_Listener_AppWarp.OnUserLeftRoom -= OnUserLeftRoom;
 		SC_Listener_AppWarp.OnPrivateUpdateReceived -= OnPrivateUpdateReceived;
-		SC_Listener_AppWarp.OnPrivateChatReceived -= OnPrivateChatReceived;
 		SC_Listener_AppWarp.OnGameStarted -= OnGameStarted;
 		SC_Listener_AppWarp.OnGameStopped -= OnGameStopped;
 		SC_Listener_AppWarp.OnSendMove -= OnSendMove;
 		SC_Listener_AppWarp.OnMoveCompleted -= OnMoveCompleted;
-
 	}
 	
 	void Start () 
 	{
-		guiText = GameObject.Find ("GUIText").GetComponent<TextMesh> ();
 		SC_App42Kit.App42Init(apiKey,secretKey);
-		SC_AppWarpKit.WarpInit(apiKey,secretKey);
+        SC_AppWarpKit.WarpInit(apiKey,secretKey);
 	}
 	
 	void Update () 
 	{
-		//Init user once so we will have a user on App42
-		if(Input.GetKeyDown(KeyCode.A))
-		{
-			Debug.Log("Creating User...");
-			guiText.text += "Creating User..."+ System.Environment.NewLine;
-			userName = "Moshe" + ((int)(Time.time * 100000)).ToString();
-			SC_App42Kit.InitUser(userName,"1234",userName + email);
-		}
-		
-		if(Input.GetKeyDown(KeyCode.Q))
-		{
-			Debug.Log("Connecting To Server...");
-			guiText.text += "Connecting To Server..."+ System.Environment.NewLine;
-			SC_AppWarpKit.connectToAppWarp(userName);
-		}
-		
-		if(Input.GetKeyDown(KeyCode.W))
-		{
-			Debug.Log("Disconnecting from Server...");
-			guiText.text += "Disconnecting from Server..."+ System.Environment.NewLine;
-			SC_AppWarpKit.DisconnectFromAppWarp();
-		}
 
-		if(Input.GetKeyDown(KeyCode.R))
-		{
-			Debug.Log("Room Created !!");
-			guiText.text += "Room Created"+ System.Environment.NewLine;
+        if(ConnStater.Get_login_ready())
+        {
+            userName = ConnStater.get_Username();
+            SC_AppWarpKit.connectToAppWarp(userName);
+        }
 
-			SC_AppWarpKit.CreateTurnBaseRoom("Stam1",userName,2,null,15);
-		}
+        if ((Input.GetKeyDown(KeyCode.O) && isMyTurn)&&(ConnStater.Get_connection_status()))
+        {
+            Debug.Log("Move turn !!");
 
-		if(Input.GetKeyDown(KeyCode.T))
-		{
-			Debug.Log("Get Rooms !!");
-			guiText.text += "Get Rooms"+ System.Environment.NewLine;
-			
-			SC_AppWarpKit.GetRoomsInRange(1,2);
-		}
-
-		if(Input.GetKeyDown(KeyCode.M))
-		{
-			Debug.Log("Sent Message !!");
-			guiText.text += "Sent Message " + userName + " " + Time.time + System.Environment.NewLine;
-
-			SC_AppWarpKit.sendPrivateChat(opponentName, userName + " " + Time.time);
-		}
-
-		if(Input.GetKeyDown(KeyCode.O) && isMyTurn)
-		{
-			Debug.Log("Move turn !!");
-			guiText.text += "Move turn " + System.Environment.NewLine;
-			
-			SC_AppWarpKit.sendMove(userName + Time.time);
-		}
-
-
-		if(Input.GetKeyDown(KeyCode.Z))
-		{
-			guiText.text =  "";
-		}
+            SC_AppWarpKit.sendMove(userName);
+        }
 	}
 
-	
-	public void onCreatedUserApp42(object respond)
-	{
-		Debug.Log(respond );
-		guiText.text += "User Created..."+ System.Environment.NewLine;
-	}
 	
 	public void OnExceptionFromApp42(Exception error)
 	{
 		Debug.Log("onConnectToApp42: " + error.Message);
-		guiText.text += error.Message + System.Environment.NewLine;
+		GetComponent<GUIText>().text += error.Message + System.Environment.NewLine;
 	}
 	
 	public void onConnectToAppWarp(ConnectEvent eventObj)
 	{
-		Debug.Log("onConnectToAppWarp " + eventObj.getResult());
-		guiText.text += "Connected To AppWrap" + System.Environment.NewLine;
+        if (eventObj.getResult() == 0)
+        {
+            Debug.Log("onConnectToAppWarp " + eventObj.getResult());
+            ConnStater.Set__connection_status(true);
+            SC_AppWarpKit.CreateTurnBaseRoom("BattleShips", userName, 2, null, 15);
+        }
 	}
 	
 	public void onDisconnectFromAppWarp(ConnectEvent eventObj)
 	{
 		Debug.Log("onDisconnectFromAppWarp " + eventObj.getResult());
-		guiText.text += "Disconnected from AppWrap" + System.Environment.NewLine;
+		GetComponent<GUIText>().text += "Disconnected from AppWrap" + System.Environment.NewLine;
 	}
 	
 	public void OnCreateRoomDone(RoomEvent eventObj)
@@ -182,7 +123,7 @@ public class SC_Logic : MonoBehaviour {
 		if(eventObj.getResult() == 	WarpResponseResultCode.SUCCESS)
 		{
 			roomId = eventObj.getData ().getId ();
-			guiText.text += "Room created! " +  eventObj.getData ().getId () + System.Environment.NewLine;
+			//GetComponent<GUIText>().text += "Room created! " +  eventObj.getData ().getId () + System.Environment.NewLine;
 			SC_AppWarpKit.JoinToRoom(eventObj.getData().getId());
 		}
 	}
@@ -195,10 +136,11 @@ public class SC_Logic : MonoBehaviour {
 	
 	public void onSubscribeToRoom(RoomEvent eventObj)
 	{
-		Debug.Log("onSubscribeToRoom " + eventObj.getResult());
-		guiText.text += "SubscribeToRoom ! " +  eventObj.getData ().getId () + System.Environment.NewLine;
-		//if (eventObj.getResult() == WarpResponseResultCode.SUCCESS)
-		//	Debug.Log("onSubscribeRoomDone : " + eventObj.getResult());
+        if (eventObj.getResult() == WarpResponseResultCode.SUCCESS)
+        {
+            Debug.Log("onSubscribeRoomDone : " + eventObj.getResult());
+            SC_AppWarpKit.StartGame();
+        }
 	}
 	
 	public void onUnSubscribeToRoom(RoomEvent eventObj)
@@ -213,8 +155,7 @@ public class SC_Logic : MonoBehaviour {
 			Debug.Log("OnJoinToRoom " + eventObj.getResult());
 			opponentName = eventObj.getData().getRoomOwner();
 			Debug.Log("roomId: " + roomId + ", OpponentName: " + opponentName);
-			guiText.text += "Joined Room! " +  eventObj.getData ().getId () + System.Environment.NewLine;
-			SC_AppWarpKit.RegisterToRoom(roomId);
+            SC_AppWarpKit.RegisterToRoom(roomId);
 		}
 		else
 		{
@@ -235,16 +176,10 @@ public class SC_Logic : MonoBehaviour {
 	{
 	}
 	
-	public void OnSendPrivateChat(byte result)
-	{
-		Debug.Log("onSendPrivateChatDone : " + result);
-
-	}
-	
 	//onky room creator will get that
 	public void OnStartGameDone(byte result)
 	{
-		Debug.Log("OnStartGameDone : " + result);
+        Debug.Log("OnStartGameDone : " + result);
 	}
 
 	public void OnStopGameDone(byte result)
@@ -259,7 +194,7 @@ public class SC_Logic : MonoBehaviour {
 		foreach (var roomData in eventObj.getRoomsData())
 		{
 		    Debug.Log("Room ID:" + roomData.getId() + ", " + roomData.getRoomOwner());
-			guiText.text += "Room ID:" + roomData.getId() + ", " + roomData.getRoomOwner() + System.Environment.NewLine;
+			GetComponent<GUIText>().text += "Room ID:" + roomData.getId() + ", " + roomData.getRoomOwner() + System.Environment.NewLine;
 			rooms.Add(roomData.getId()); // add to the list of rooms id
 		}
 		
@@ -302,7 +237,7 @@ public class SC_Logic : MonoBehaviour {
 		if(sender != userName)
 		{
 			Debug.Log ("Message Recived, (" + sender + ") " + message);
-			guiText.text += "Message Recived, (" + sender + ") " + message;
+			GetComponent<GUIText>().text += "Message Recived, (" + sender + ") " + message;
 		}
 	}
 	
@@ -324,7 +259,7 @@ public class SC_Logic : MonoBehaviour {
 
 	public void OnMoveCompleted(MoveEvent move)
 	{     
-		Debug.Log("OnMoveCompleted" + " " + move.getNextTurn() + " " + move.getMoveData());
+		Debug.Log("OnMoveCompleted" + " " + move.getNextTurn());
 		if (move.getNextTurn () == userName)
 			isMyTurn = true;
 		else isMyTurn = false;
