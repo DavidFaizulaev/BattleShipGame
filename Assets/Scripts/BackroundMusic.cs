@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BackroundMusic : MonoBehaviour {
 
-	Object[] myMusic; // declare this as Object array, basically contains all music used in game.
+	private Object[] myMusic; // declare this as Object array, basically contains all music used in game.
 	
 	void Start ()
     {
@@ -19,7 +19,7 @@ public class BackroundMusic : MonoBehaviour {
 	}
 	
 	void playRandomMusic() {
-		GetComponent<AudioSource>().clip = myMusic[Random.Range(0,myMusic.Length)] as AudioClip;
+		GetComponent<AudioSource>().clip = myMusic[Random.Range(0,(myMusic.Length-1))] as AudioClip;
 		GetComponent<AudioSource>().Play();
 	}
 }

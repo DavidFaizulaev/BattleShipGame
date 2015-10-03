@@ -111,12 +111,6 @@
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
     </Reference>
-    <Reference Include="App42_Unity3D_SDK_2.9.1">
-      <HintPath>Assets\DLL\App42_Unity3D_SDK_2.9.1.dll</HintPath>
-    </Reference>
-    <Reference Include="AppWarpUnity">
-      <HintPath>Assets\DLL\AppWarpUnity.dll</HintPath>
-    </Reference>
     <Reference Include="IFacebook">
       <HintPath>Assets\Facebook\Scripts\IFacebook.dll</HintPath>
     </Reference>

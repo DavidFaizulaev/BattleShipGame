@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleShipGame.CSharp", "BattleShipGame.CSharp.csproj", "{7E9E8E94-D413-1F1E-8AAE-CA509EB1F13E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleShipGame.CSharp.Editor", "BattleShipGame.CSharp.Editor.csproj", "{98A36B0A-605C-2F54-F83F-1149FF797918}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,10 +13,6 @@ Global
 		{7E9E8E94-D413-1F1E-8AAE-CA509EB1F13E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E9E8E94-D413-1F1E-8AAE-CA509EB1F13E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E9E8E94-D413-1F1E-8AAE-CA509EB1F13E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98A36B0A-605C-2F54-F83F-1149FF797918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98A36B0A-605C-2F54-F83F-1149FF797918}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98A36B0A-605C-2F54-F83F-1149FF797918}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98A36B0A-605C-2F54-F83F-1149FF797918}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

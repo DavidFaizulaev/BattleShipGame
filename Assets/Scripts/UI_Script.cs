@@ -13,29 +13,10 @@ public class UI_Script : MonoBehaviour
 	public GameObject OptionsPanel;
 	public GameObject MultiPanel;
 	public GameObject InfoPanel;
-    public GameObject FBLoginPanel;
-
-    public InputField input_email;
-    public InputField input_password;
-
-    private bool user_logged;
-    private SC_FB_Holder fb_holder;
 
     void Start ()
     {
 		Debug.Log ("load menu");
-    }
-
-    public void loginPress()
-    {
-        Debug.Log("loginPress");
-        //check if input fields are empty
-        if ((input_email.text != "") && (input_password.text != ""))
-        {
-           // Debug.Log("valid input");
-            fb_holder = new SC_FB_Holder();
-            fb_holder.InitFB();
-        }
     }
 
 	public void singlePlayerPress()

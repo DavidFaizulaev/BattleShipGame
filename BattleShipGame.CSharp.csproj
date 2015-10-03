@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.2.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,33 +68,8 @@
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
     </Reference>
-    <Reference Include="App42_Unity3D_SDK_2.9.1">
-      <HintPath>Assets\DLL\App42_Unity3D_SDK_2.9.1.dll</HintPath>
-    </Reference>
-    <Reference Include="AppWarpUnity">
-      <HintPath>Assets\DLL\AppWarpUnity.dll</HintPath>
-    </Reference>
-    <Reference Include="IFacebook">
-      <HintPath>Assets\Facebook\Scripts\IFacebook.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Examples\Scripts\ConsoleBase.cs" />
-    <Compile Include="Assets\Examples\Scripts\GameGroupsConsole.cs" />
-    <Compile Include="Assets\Examples\Scripts\InteractiveConsole.cs" />
-    <Compile Include="Assets\Facebook\Scripts\AndroidFacebook.cs" />
-    <Compile Include="Assets\Facebook\Scripts\AndroidFacebookLoader.cs" />
-    <Compile Include="Assets\Facebook\Scripts\CanvasFacebookLoader.cs" />
-    <Compile Include="Assets\Facebook\Scripts\EditorFacebook.cs" />
-    <Compile Include="Assets\Facebook\Scripts\EditorFacebookAccessToken.cs" />
-    <Compile Include="Assets\Facebook\Scripts\EditorFacebookLoader.cs" />
-    <Compile Include="Assets\Facebook\Scripts\FB.cs" />
-    <Compile Include="Assets\Facebook\Scripts\FBAppRequestsFilterGroup.cs" />
-    <Compile Include="Assets\Facebook\Scripts\FBScreen.cs" />
-    <Compile Include="Assets\Facebook\Scripts\FBSettings.cs" />
-    <Compile Include="Assets\Facebook\Scripts\IOSFacebook.cs" />
-    <Compile Include="Assets\Facebook\Scripts\IOSFacebookLoader.cs" />
-    <Compile Include="Assets\Facebook\Scripts\NativeDialogModes.cs" />
     <Compile Include="Assets\Scripts\BackroundMusic.cs" />
     <Compile Include="Assets\Scripts\BattleShip.cs" />
     <Compile Include="Assets\Scripts\ButtonInfo.cs" />
@@ -102,16 +79,8 @@
     <Compile Include="Assets\Scripts\EnemyBoardManager.cs" />
     <Compile Include="Assets\Scripts\InputValidator.cs" />
     <Compile Include="Assets\Scripts\IntroUI.cs" />
+    <Compile Include="Assets\Scripts\Multi_UI.cs" />
     <Compile Include="Assets\Scripts\PlayerBoardManager.cs" />
-    <Compile Include="Assets\Scripts\SC_App42Kit.cs" />
-    <Compile Include="Assets\Scripts\SC_AppWarpKit.cs" />
-    <Compile Include="Assets\Scripts\SC_FB_Holder.cs" />
-    <Compile Include="Assets\Scripts\SC_Listener_App42.cs" />
-    <Compile Include="Assets\Scripts\SC_Listener_AppWarp.cs" />
-    <Compile Include="Assets\Scripts\SC_Multiplayer.cs" />
-    <Compile Include="Assets\Scripts\SC_controller.cs" />
-    <Compile Include="Assets\Scripts\SC_game.cs" />
-    <Compile Include="Assets\Scripts\SC_slider.cs" />
     <Compile Include="Assets\Scripts\SgameInfo.cs" />
     <Compile Include="Assets\Scripts\Slider.cs" />
     <Compile Include="Assets\Scripts\Turn.cs" />
