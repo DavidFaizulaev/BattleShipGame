@@ -11,6 +11,7 @@ public class MultiplayerBoardManager : MonoBehaviour
 {
     private BattleShip[] allPlayerShips;
     private GameObject appwarp_logic;
+    private SC_Logic appwarp_logic_sc;
     private Button[] all_buttons;
     private bool first_Completion;
     private int hit_Counter;
@@ -30,9 +31,19 @@ public class MultiplayerBoardManager : MonoBehaviour
            allPlayerShips[i].Init_Ship(SgameInfo.max_Ship_Size-i);
         }
 
-        appwarp_logic = GameObject.Find("WinnerCanvas");
+        appwarp_logic = GameObject.Find("NetworkManager");
+        appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
         
         Debug.Log("done start in pbm");
+    }
+
+    void Update()
+    {
+        if (appwarp_logic_sc.updateboards)
+        {
+            EnemyMove(appwarp_logic_sc.enemy_move);
+            appwarp_logic_sc.updateboards = false;
+        }
     }
 
     public void OnButtonPressed(Button btn)
@@ -41,7 +52,7 @@ public class MultiplayerBoardManager : MonoBehaviour
         Debug.Log("vector x " + btnPos.x + "vector y " + btnPos.y);
         //checking if boat structure is not complete yet and if it's the player's turn to build ship
 
-        if ((Turn.Pturn) && (CheckStructure() == false))
+        if ((appwarp_logic_sc.IsItMine()) && (CheckStructure() == false))
         {
             if (allPlayerShips[curr_ship_indx].Set_Loc(btnPos))
             {
@@ -56,24 +67,35 @@ public class MultiplayerBoardManager : MonoBehaviour
         //checking if boat structure is complete and transfer the turn to the AI.
         if ((first_Completion == false) && (CheckStructure()))
         {
-            Turn.EndTurn(false, true);
             first_Completion = true;
-            Debug.Log("structure complete - change turn to PC");
+            //message code - 2 - battleship creation complete - switch turn to other player.
+            appwarp_logic_sc.MakeMyMove("2");
+            Debug.Log("structure complete - change turn to other player");
         }
     }
 
     //Accessed by EnemyAI in order to try and hit a player's battlesip.
-    public void EnemyMove(Vector2 vc)
+    public void EnemyMove(string str)
     {
         //bool attck_result = allPlayerShips[0].ifexists(vc);
         //if 'attck_result' is TRUE then the vector recieved marks a ship's location
         //if (attck_result)
+
+        Vector2 vc;
+
+        int startInd = str.IndexOf("X:") + 2;
+        float aXPosition = float.Parse(str.Substring(startInd, str.IndexOf(" Y") - startInd));
+        startInd = str.IndexOf("Y:") + 2;
+        float aYPosition = float.Parse(str.Substring(startInd, str.IndexOf("}") - startInd));
+
+        vc = new Vector2(aXPosition, aYPosition);
+
         if (GetAttackResult(vc) != -1) 
         {
             //move successful
             //ship exits
             //ship loc marked as hit
-          //  Debug.Log("attack success");
+            //Debug.Log("attack success");
             all_buttons = this.GetComponentsInChildren<Button>();
             foreach (Button b in all_buttons)
             {
@@ -87,14 +109,13 @@ public class MultiplayerBoardManager : MonoBehaviour
                         b.image.color = new Color(Color.red.r, Color.red.g, Color.red.b, 1f);
                       //  Turn.set_LastValidAttackCrods(vc);
                         hit_Counter++;
+                        appwarp_logic_sc.MakeMyMove("1");
 
                         //if (hit_Counter == SgameInfo.max_Ship_Size)
                         if (hit_Counter == SgameInfo.max_number_of_hits)
                         {
-                            Turn.AIwon = true;
-                            Debug.Log("game over - AI won");
-                            //winner code - 2 - AI won
-                            Turn.RestartLevel(2);
+                           Debug.Log("game over - AI won");
+                           //winner code - 2 - AI won
                         }
                     }
                 }
@@ -116,15 +137,11 @@ public class MultiplayerBoardManager : MonoBehaviour
                     {
                         //mark location as missed attempt
                         b.image.color = new Color(Color.black.r, Color.black.g, Color.black.b, 1f);
+                        appwarp_logic_sc.MakeMyMove("0");
                     }
                 }
             }
         }
-    }
-
-    public void PlayerMove()
-    {
-        Debug.Log("player's turn now");
     }
 
     private bool CheckStructure()
@@ -149,4 +166,6 @@ public class MultiplayerBoardManager : MonoBehaviour
         }
         return ship_indx;
     }
+
+    
 }

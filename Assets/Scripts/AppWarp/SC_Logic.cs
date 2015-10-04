@@ -16,9 +16,19 @@ public class SC_Logic : MonoBehaviour {
 	private List<string> rooms;
 	private string opponentName = "";
 
-	private bool isMyTurn = false;
+    //false = created room
+    //true  = joined room
+    private bool created_or_joined = false;
 
-	void OnEnable()
+	private bool isMyTurn = false;
+    
+    public bool updateboards = false;
+    public bool updateattackresult = false;
+    public string enemy_move;
+    public string my_last_move;
+    public int my_enemy_attack_res;
+    
+    void OnEnable()
 	{
             SC_Listener_App42.OnExceptionFromApp42 += OnExceptionFromApp42;
 		
@@ -85,20 +95,12 @@ public class SC_Logic : MonoBehaviour {
             userName = ConnStater.get_Username();
             SC_AppWarpKit.connectToAppWarp(userName);
         }
-
-        if ((Input.GetKeyDown(KeyCode.O) && isMyTurn)&&(ConnStater.Get_connection_status()))
-        {
-            Debug.Log("Move turn !!");
-
-            SC_AppWarpKit.sendMove(userName);
-        }
 	}
 
 	
 	public void OnExceptionFromApp42(Exception error)
 	{
 		Debug.Log("onConnectToApp42: " + error.Message);
-		GetComponent<GUIText>().text += error.Message + System.Environment.NewLine;
 	}
 	
 	public void onConnectToAppWarp(ConnectEvent eventObj)
@@ -107,25 +109,24 @@ public class SC_Logic : MonoBehaviour {
         {
             Debug.Log("onConnectToAppWarp " + eventObj.getResult());
             ConnStater.Set__connection_status(true);
-            SC_AppWarpKit.CreateTurnBaseRoom("BattleShips", userName, 2, null, 15);
+            SC_AppWarpKit.GetRoomsInRange(1, 1);
+            //SC_AppWarpKit.CreateTurnBaseRoom("BattleShips", userName, 2, null, 60);
         }
 	}
 	
 	public void onDisconnectFromAppWarp(ConnectEvent eventObj)
 	{
 		Debug.Log("onDisconnectFromAppWarp " + eventObj.getResult());
-		GetComponent<GUIText>().text += "Disconnected from AppWrap" + System.Environment.NewLine;
 	}
 	
 	public void OnCreateRoomDone(RoomEvent eventObj)
 	{
 		Debug.Log("OnCreateRoomDone " + eventObj.getResult() + " room Owner " + eventObj.getData().getRoomOwner() + " " + eventObj.getData().getRoomOwner());
-		if(eventObj.getResult() == 	WarpResponseResultCode.SUCCESS)
-		{
-			roomId = eventObj.getData ().getId ();
-			//GetComponent<GUIText>().text += "Room created! " +  eventObj.getData ().getId () + System.Environment.NewLine;
-			SC_AppWarpKit.JoinToRoom(eventObj.getData().getId());
-		}
+        if (eventObj.getResult() == WarpResponseResultCode.SUCCESS)
+        {
+            roomId = eventObj.getData().getId();
+            SC_AppWarpKit.JoinToRoom(eventObj.getData().getId());
+        }
 	}
 	
 	//only room creator will get the notification
@@ -139,7 +140,8 @@ public class SC_Logic : MonoBehaviour {
         if (eventObj.getResult() == WarpResponseResultCode.SUCCESS)
         {
             Debug.Log("onSubscribeRoomDone : " + eventObj.getResult());
-            SC_AppWarpKit.StartGame();
+            if(!created_or_joined)
+                SC_AppWarpKit.StartGame();
         }
 	}
 	
@@ -169,7 +171,7 @@ public class SC_Logic : MonoBehaviour {
 	
 	public void OnGetLiveRoomInfo(LiveRoomInfoEvent eventObj)
 	{
-		// Debug.Log("OnGetLiveRoomInfo " + eventObj.getResult() + " " + eventObj.getData().getId() + " " + eventObj.getJoinedUsers().Length);
+		
 	}
 	
 	public void OnSendPrivateUpdate(byte result)
@@ -194,16 +196,24 @@ public class SC_Logic : MonoBehaviour {
 		foreach (var roomData in eventObj.getRoomsData())
 		{
 		    Debug.Log("Room ID:" + roomData.getId() + ", " + roomData.getRoomOwner());
-			GetComponent<GUIText>().text += "Room ID:" + roomData.getId() + ", " + roomData.getRoomOwner() + System.Environment.NewLine;
 			rooms.Add(roomData.getId()); // add to the list of rooms id
 		}
 		
 		Debug.Log("Rooms Amount: " + rooms.Count);
-		if(rooms.Count > 0)
-		{
-			roomId = rooms[0];
-			SC_AppWarpKit.JoinToRoom (rooms[0]);
-		}
+        if (rooms.Count > 0)
+        {
+            roomId = rooms[0];// why
+            Debug.Log("new roomID:" + roomId);
+            //false = created room
+            //true  = joined room
+            created_or_joined = true;
+            SC_AppWarpKit.JoinToRoom(rooms[0]);//rooms[0] is the last created room in the list
+        }
+        else
+        {
+            Debug.Log("no room exists - need to create");
+            SC_AppWarpKit.CreateTurnBaseRoom("BattleShips", userName, 2, null, 60);
+        }
 	}
 	
 	public void OnRoomCreated(RoomData eventObj)
@@ -222,23 +232,14 @@ public class SC_Logic : MonoBehaviour {
 	{
 		Debug.Log("OnUserJoinRoom" + " " + eventObj.getRoomOwner() + " User connected" + userName);
 		opponentName = userName;
-		SC_AppWarpKit.StartGame();
+
+        if (!created_or_joined)
+            SC_AppWarpKit.StartGame();
 	}
 	
 	public void OnPrivateUpdateReceived(string sender, byte[] eventObj, bool fromUdp)
 	{
 		//Debug.Log("OnPrivateUpdateReceived" + " " + messageReceived);
-	}
-	
-	public void OnPrivateChatReceived(string sender, string message)
-	{
-//		Debug.Log("OnPrivateChatReceived (" + sender + ") " + message + " " + sc_GuiManager.currentUser.CurrentUserState + " " + haveStart + " " + haveStartApproved);
-	
-		if(sender != userName)
-		{
-			Debug.Log ("Message Recived, (" + sender + ") " + message);
-			GetComponent<GUIText>().text += "Message Recived, (" + sender + ") " + message;
-		}
 	}
 	
 	public void OnGameStarted(string sender, string roomId, string nextTurn)
@@ -260,8 +261,55 @@ public class SC_Logic : MonoBehaviour {
 	public void OnMoveCompleted(MoveEvent move)
 	{     
 		Debug.Log("OnMoveCompleted" + " " + move.getNextTurn());
-		if (move.getNextTurn () == userName)
-			isMyTurn = true;
-		else isMyTurn = false;
+        if (move.getNextTurn() == userName)
+        {
+            isMyTurn = true;
+            ParseEnemyMove(move.getMoveData());
+        }
+        else isMyTurn = false;
 	}
+
+    public bool IsItMine()
+    {
+        return isMyTurn;
+    }
+
+    public void MakeMyMove(string str)
+    {
+        Debug.Log("Move turn !!");
+        my_last_move = str;
+        SC_AppWarpKit.sendMove(str);
+    }
+
+    private void ParseEnemyMove(string str)
+    {
+        if (str == null) str = "";
+
+        //enemy tried to attack battleship
+        if ((str.Contains("X")&&str.Contains("Y")))
+        {
+            updateboards = true;
+            enemy_move = str;
+        }
+        else
+        {
+            //other player completed ship structure
+            if (str.Contains("2"))
+                Debug.Log("other player completed ship structure");
+
+            if (str.Contains("1"))
+            {
+                Debug.Log("previous attack attempt success");
+                my_enemy_attack_res = 1;
+                updateattackresult = true;
+            }
+
+            if (str.Contains("0"))
+            {
+                Debug.Log("previous attack attempt failed");
+                my_enemy_attack_res = 0;
+                updateattackresult = true;
+            }
+        }
+    }
 }
