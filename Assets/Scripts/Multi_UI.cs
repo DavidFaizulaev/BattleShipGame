@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI; // we need This namespace in order to access UI elements within our script
 using System.Collections;
-
+using System.Text.RegularExpressions;
 
 //This class is responsible for operating the multiplayer UI
 //As APPWARP requets a username in order to access the game lobby & room
@@ -25,12 +25,14 @@ public class Multi_UI : MonoBehaviour
     public void connectPressed()
     {
         Debug.Log("ConnectPressed");
+        
         string var_username = username.text.ToString();
+        var regex_sp_chrs = new Regex("^[a-zA-Z0-9 ]*$");
 
-        if ((var_username.Length < 5) || (var_username.Length > 50))
+        if ((regex_sp_chrs.IsMatch(var_username))||(var_username.Length < 5) || (var_username.Length > 50))
         {
             Debug.Log("no good");
-            response_msg.text = "Invalid Input -\n Username must be at least 5 charachters long \nUsername can be maximum of 50 charachters";
+            response_msg.text = "Invalid Input -\n Username must be at least 5 charachters long \nUsername can be maximum of 50 charachters \nUsername cannot contain any contains any special characters like !,@,#,$,%,^,&,*,";
             MsgPanel.SetActive(true);
         }
         else

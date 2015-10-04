@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿//Unity course Summer 2015 - David Faizulaev
+using UnityEngine;
 using System.Collections;
 using System;
 using com.shephertz.app42.gaming.multiplayer.client.events;
@@ -6,6 +7,7 @@ using com.shephertz.app42.gaming.multiplayer.client.command;
 using com.shephertz.app42.gaming.multiplayer.client.listener;
 using System.Collections.Generic;
 
+//This class is responsible for performing the connection to the Appwarp server, create/join a room and send 'moves' respectivly between the players.
 public class SC_Logic : MonoBehaviour {
 
     private string apiKey = "d8babde27e9310a6f141e850003e1b61bc68f7ddb02b90f71e79b7512d08be4c";
@@ -27,7 +29,8 @@ public class SC_Logic : MonoBehaviour {
     public string enemy_move;
     public string my_last_move;
     public int my_enemy_attack_res;
-    
+    public int game_result;
+ 
     void OnEnable()
 	{
             SC_Listener_App42.OnExceptionFromApp42 += OnExceptionFromApp42;
@@ -85,6 +88,8 @@ public class SC_Logic : MonoBehaviour {
 	{
 		SC_App42Kit.App42Init(apiKey,secretKey);
         SC_AppWarpKit.WarpInit(apiKey,secretKey);
+
+        game_result = -9999;
 	}
 	
 	void Update () 
@@ -110,7 +115,6 @@ public class SC_Logic : MonoBehaviour {
             Debug.Log("onConnectToAppWarp " + eventObj.getResult());
             ConnStater.Set__connection_status(true);
             SC_AppWarpKit.GetRoomsInRange(1, 1);
-            //SC_AppWarpKit.CreateTurnBaseRoom("BattleShips", userName, 2, null, 60);
         }
 	}
 	
@@ -308,6 +312,13 @@ public class SC_Logic : MonoBehaviour {
             {
                 Debug.Log("previous attack attempt failed");
                 my_enemy_attack_res = 0;
+                updateattackresult = true;
+            }
+
+            if (str.Contains("you won"))
+            {
+                Debug.Log("I won the game");
+                game_result = 1;
                 updateattackresult = true;
             }
         }

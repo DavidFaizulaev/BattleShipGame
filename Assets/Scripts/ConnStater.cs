@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿//Unity course Summer 2015 - David Faizulaev
+using UnityEngine;
 using System.Collections;
 
+//This is an aid class, which holds static variables in regards to the connection state, login and so on.
 public class ConnStater : MonoBehaviour {
 
     private static bool login_ready;
@@ -39,5 +41,14 @@ public class ConnStater : MonoBehaviour {
     public static string get_Username()
     {
         return usrnm;
+    }
+
+    //true = you won, false = you lost
+    public static void set_Game_Result (bool b)
+    {
+         if(b)
+             Debug.Log("Congratulations, You've won the game!");
+         else
+             Debug.Log("Too bad, You've lost the game!");
     }
 }

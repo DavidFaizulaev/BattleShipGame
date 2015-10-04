@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 //Operation of the player game board.
-//Allows the player to place the battleship and is used by the enemy AI in order to make a game move.
+//Allows the player to place the battleship and is used by the opponent in order to make a game move.
 //either hitting or missing the player's battleship.
 
 public class MultiplayerBoardManager : MonoBehaviour
@@ -16,6 +16,8 @@ public class MultiplayerBoardManager : MonoBehaviour
     private bool first_Completion;
     private int hit_Counter;
     private int curr_ship_indx;
+
+    public Text turn_msg;
 
     void Start()
     {
@@ -33,7 +35,13 @@ public class MultiplayerBoardManager : MonoBehaviour
 
         appwarp_logic = GameObject.Find("NetworkManager");
         appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
-        
+
+        if (appwarp_logic_sc.IsItMine())
+            turn_msg.text = "Your turn - Place 2 battleships on your game board\n \t\tFirst of 4 squars \n\t\tSecond of 3 squars";
+
+        else
+            turn_msg.text = "Opponent turn - Places 2 battleships on their game board";
+
         Debug.Log("done start in pbm");
     }
 
@@ -41,9 +49,27 @@ public class MultiplayerBoardManager : MonoBehaviour
     {
         if (appwarp_logic_sc.updateboards)
         {
-            EnemyMove(appwarp_logic_sc.enemy_move);
-            appwarp_logic_sc.updateboards = false;
+            if (appwarp_logic_sc.game_result != (-9999))
+            {
+                //you won the game
+                if (appwarp_logic_sc.game_result == 1)
+                    ConnStater.set_Game_Result(true);
+
+                else
+                    ConnStater.set_Game_Result(false);
+            }
+            else
+            {
+                EnemyMove(appwarp_logic_sc.enemy_move);
+                appwarp_logic_sc.updateboards = false;
+            }
         }
+
+        if((first_Completion)&&(appwarp_logic_sc.IsItMine()))
+            turn_msg.text = "Your turn - try to attack the enemies ships";
+
+        if ((first_Completion) && (!appwarp_logic_sc.IsItMine()))
+            turn_msg.text = "Opponent turn - will now try attack your ships";
     }
 
     public void OnButtonPressed(Button btn)
@@ -69,6 +95,7 @@ public class MultiplayerBoardManager : MonoBehaviour
         {
             first_Completion = true;
             //message code - 2 - battleship creation complete - switch turn to other player.
+            turn_msg.text = "Your turn has ended - now changing turn to opponent";
             appwarp_logic_sc.MakeMyMove("2");
             Debug.Log("structure complete - change turn to other player");
         }
@@ -115,7 +142,7 @@ public class MultiplayerBoardManager : MonoBehaviour
                         if (hit_Counter == SgameInfo.max_number_of_hits)
                         {
                            Debug.Log("game over - AI won");
-                           //winner code - 2 - AI won
+                           appwarp_logic_sc.MakeMyMove("I won the game");
                         }
                     }
                 }
