@@ -27,8 +27,8 @@ public class TurnManager : MonoBehaviour
         last_valid_x = (-1);
         last_valid_y = (-1);
 
-        endgamecanvas = GameObject.Find ("WinnerCanvas");
-		endgamecanvas.GetComponent<Canvas> ().enabled=false;
+       endgamecanvas = GameObject.Find ("WinnerCanvas");
+	   endgamecanvas.GetComponent<Canvas> ().enabled=false;
 	}
 
 	//method used to switch turn between player and AI
