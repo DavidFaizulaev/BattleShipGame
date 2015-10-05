@@ -38,7 +38,7 @@ public class PlayerBoardManager : MonoBehaviour
         Debug.Log("vector x " + btnPos.x + "vector y " + btnPos.y);
         //checking if boat structure is not complete yet and if it's the player's turn to build ship
 
-        if ((Turn.Pturn) && (CheckStructure() == false))
+        if ((TurnManager.Pturn) && (CheckStructure() == false))
         {
             if (allPlayerShips[curr_ship_indx].Set_Loc(btnPos))
             {
@@ -53,7 +53,7 @@ public class PlayerBoardManager : MonoBehaviour
         //checking if boat structure is complete and transfer the turn to the AI.
         if ((first_Completion == false) && (CheckStructure()))
         {
-            Turn.EndTurn(false, true);
+            TurnManager.EndTurn(false, true);
             first_Completion = true;
             Debug.Log("structure complete - change turn to PC");
         }
@@ -88,10 +88,10 @@ public class PlayerBoardManager : MonoBehaviour
                         //if (hit_Counter == SgameInfo.max_Ship_Size)
                         if (hit_Counter == SgameInfo.max_number_of_hits)
                         {
-                            Turn.AIwon = true;
+                            TurnManager.AIwon = true;
                             Debug.Log("game over - AI won");
                             //winner code - 2 - AI won
-                            Turn.RestartLevel(2);
+                            TurnManager.RestartLevel(2);
                         }
                     }
                 }

@@ -51,17 +51,11 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Analytics">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
@@ -93,6 +87,7 @@
     <Compile Include="Assets\Scripts\Endgamecanvas.cs" />
     <Compile Include="Assets\Scripts\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\EnemyBoardManager.cs" />
+    <Compile Include="Assets\Scripts\HandleEndGame.cs" />
     <Compile Include="Assets\Scripts\InputValidator.cs" />
     <Compile Include="Assets\Scripts\IntroUI.cs" />
     <Compile Include="Assets\Scripts\MultiEnemyBoardManager.cs" />
@@ -101,7 +96,7 @@
     <Compile Include="Assets\Scripts\PlayerBoardManager.cs" />
     <Compile Include="Assets\Scripts\SgameInfo.cs" />
     <Compile Include="Assets\Scripts\Slider.cs" />
-    <Compile Include="Assets\Scripts\Turn.cs" />
+    <Compile Include="Assets\Scripts\TurnManager.cs" />
     <Compile Include="Assets\Scripts\UI_Script.cs" />
   </ItemGroup>
   <ItemGroup>

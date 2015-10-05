@@ -21,7 +21,6 @@ public class SC_Logic : MonoBehaviour {
     //false = created room
     //true  = joined room
     private bool created_or_joined = false;
-
 	private bool isMyTurn = false;
     
     public bool updateboards = false;
@@ -94,8 +93,7 @@ public class SC_Logic : MonoBehaviour {
 	
 	void Update () 
 	{
-
-        if(ConnStater.Get_login_ready())
+        if((ConnStater.Get_login_ready())&&(ConnStater.Get_connection_status()==false))
         {
             userName = ConnStater.get_Username();
             SC_AppWarpKit.connectToAppWarp(userName);
@@ -199,19 +197,18 @@ public class SC_Logic : MonoBehaviour {
 		rooms = new List<string>();
 		foreach (var roomData in eventObj.getRoomsData())
 		{
-		    Debug.Log("Room ID:" + roomData.getId() + ", " + roomData.getRoomOwner());
-			rooms.Add(roomData.getId()); // add to the list of rooms id
+		    rooms.Add(roomData.getId()); // add to the list of rooms id
 		}
 		
-		Debug.Log("Rooms Amount: " + rooms.Count);
+		Debug.Log("Number of rooms found: " + rooms.Count);
+        
         if (rooms.Count > 0)
         {
-            roomId = rooms[0];// why
-            Debug.Log("new roomID:" + roomId);
+            roomId = rooms[0];
             //false = created room
             //true  = joined room
             created_or_joined = true;
-            SC_AppWarpKit.JoinToRoom(rooms[0]);//rooms[0] is the last created room in the list
+            SC_AppWarpKit.JoinToRoom(rooms[0]); //rooms[0] is the last created room in the list
         }
         else
         {
@@ -235,8 +232,12 @@ public class SC_Logic : MonoBehaviour {
 	public void OnUserJoinRoom(RoomData eventObj, string userName)
 	{
 		Debug.Log("OnUserJoinRoom" + " " + eventObj.getRoomOwner() + " User connected" + userName);
-		opponentName = userName;
+		
+        //checking if room was created by other user - if so, it will be set as the opponent.
+        if(eventObj.getRoomOwner() != userName)
+                opponentName = eventObj.getRoomOwner();
 
+        //If game room was created by user - then he should initiate game start
         if (!created_or_joined)
             SC_AppWarpKit.StartGame();
 	}
@@ -248,7 +249,7 @@ public class SC_Logic : MonoBehaviour {
 	
 	public void OnGameStarted(string sender, string roomId, string nextTurn)
 	{
-//		Debug.Log("OnGameStarted" + " " + sender + " " + roomId + " " + nextTurn + " " + sc_GuiManager.currentUser.CurrentUserState);
+        Debug.Log("game successfully started");
 		isMyTurn = true;
 	}
 	

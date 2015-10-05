@@ -39,8 +39,8 @@ public class EnemyBoardManager : MonoBehaviour {
 		int random_x_value=0;
 		int random_y_value=0;
 
-		int last_placed_x = 0;
-		int last_placed_y = 0;
+		//int last_placed_x = 0;
+		//int last_placed_y = 0;
 
 		int initial_y = 0;
 		int initial_x = 0;
@@ -59,8 +59,8 @@ public class EnemyBoardManager : MonoBehaviour {
 			//location ok - increase counter
 			initial_y = random_y_value;
 			initial_x = random_x_value;
-			last_placed_y = initial_y;
-			last_placed_x = random_x_value;
+			//last_placed_y = initial_y;
+	//		last_placed_x = random_x_value;
 		//	Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
 			i++;
 		}
@@ -84,7 +84,7 @@ public class EnemyBoardManager : MonoBehaviour {
                 if (btshp.Set_Loc(vc)) 
 				{
 					//location ok - increase counter
-					last_placed_x = random_x_value;
+					//last_placed_x = random_x_value;
 			//		Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
 					i++;
 				}
@@ -102,7 +102,7 @@ public class EnemyBoardManager : MonoBehaviour {
                 if (btshp.Set_Loc(vc)) 
 				{
 					//location ok - increase counter
-					last_placed_y = random_y_value;
+					//last_placed_y = random_y_value;
 				//	Debug.Log("Placed AI ship at X" + vc.x + " Y" + vc.y);
 					i++;
 				}
@@ -114,7 +114,8 @@ public class EnemyBoardManager : MonoBehaviour {
     {
 		Debug.Log ("in OnButtonPressed ebm");
 
-		if (Turn.Pturn) {
+        if (TurnManager.Pturn)
+        {
 
 			Vector2 btnPos = btn.GetComponent<ButtonInfo> ().position;
 
@@ -140,13 +141,13 @@ public class EnemyBoardManager : MonoBehaviour {
 
 					        if (hit_Counter == SgameInfo.max_number_of_hits)
                             {
-								Turn.Pwon = true;
+                                TurnManager.Pwon = true;
 								Debug.Log ("game over - player won");
 								//winner code - 1 - player won
-								Turn.RestartLevel (1);
+                                TurnManager.RestartLevel(1);
 							}
 							Debug.Log("player's turn complete - change turn to PC");
-							Turn.EndTurn (false, true);
+                            TurnManager.EndTurn(false, true);
 						}
 					}
 				}
@@ -163,7 +164,7 @@ public class EnemyBoardManager : MonoBehaviour {
 							b.image.color = new Color (Color.black.r, Color.black.g, Color.black.b, 1f);
 						}
 						Debug.Log("player's turn complete - change turn to PC");
-						Turn.EndTurn (false, true);
+                        TurnManager.EndTurn(false, true);
 					}
 				}
 			}

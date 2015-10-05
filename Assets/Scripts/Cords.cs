@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-//the class is used to mark a ship cordinatnes, via X,Y axis in each button
+//The class is used to mark a battleship's cordinatnes, via X,Y axis in each button
 public class Cords
 {
 	private bool hitmiss;//true - hit, false - no hit

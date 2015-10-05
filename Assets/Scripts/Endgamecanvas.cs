@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-// class used to disaply end game message, used by Turn.cs
+//The class used to disaply end game message, used by HandleEndGame
 public class Endgamecanvas : MonoBehaviour
 {
 	public Text gameresult_text;
@@ -15,14 +15,12 @@ public class Endgamecanvas : MonoBehaviour
 
 	public void DisplayCanvas(int win_code)
 	{
-		//Debug.Log ("DisplayCanvas");
-
-		string winner_entity = null;
+        string str = null;
 		if (win_code == 1)
-						winner_entity = "You Won!";
+			str = "You Won!";
 		if(win_code==2)
-						winner_entity = "You Lost!";
+            str = "You Lost!";
 
-		gameresult_text.text =  gameresult_text.text.ToString() + "\n" +  winner_entity;
+        gameresult_text.text = gameresult_text.text.ToString() + "\n" + str;
 	}
 }

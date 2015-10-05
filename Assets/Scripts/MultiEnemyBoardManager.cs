@@ -9,10 +9,7 @@ using UnityEngine.UI;
 //either hitting or missing the opponent's battleship.
 public class MultiEnemyBoardManager : MonoBehaviour
 {
-    public EnemyAI enemyAI;
-    private BattleShip[] allAIships;
-	private Button[] all_buttons;
-	private int hit_Counter;
+    private Button[] all_buttons;
 
     private GameObject appwarp_logic;
     private SC_Logic appwarp_logic_sc;
@@ -20,7 +17,6 @@ public class MultiEnemyBoardManager : MonoBehaviour
 	void Start ()
 	{
 		Debug.Log ("start in multi ebm");
-		hit_Counter = 0;
         appwarp_logic = GameObject.Find("NetworkManager");
         appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
         Debug.Log("done start in multi ebm");

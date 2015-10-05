@@ -27,8 +27,6 @@ public class UI_Script : MonoBehaviour
 	public void MultiPlayerPress() //This function will be used on our Multiplayer button
 	{
 		Debug.Log ("MultiPlayerPress");
-		//MainPanel.SetActive (false);
-		//MultiPanel.SetActive (true);
         StartMultiPlayerLevel();
 		
 	}

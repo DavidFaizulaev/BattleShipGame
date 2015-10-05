@@ -19,8 +19,8 @@ public class EnemyAI : MonoBehaviour
 	}
 
 	void Update ()
-	{	
-		if (Turn.AIturn)
+	{
+        if (TurnManager.AIturn)
 		{
 			Debug.Log ("AI turn");
 			MakeMove ();
@@ -36,13 +36,12 @@ public class EnemyAI : MonoBehaviour
         
         used_vectors.Add(vc);
 		myboard.EnemyMove(vc);
-		Turn.EndTurn (true, false);
+        TurnManager.EndTurn(true, false);
 	}
 
 	private void getRandomLocation ()
 	{
 		vc = new Vector2 (Random.Range (0, 10), Random.Range (0, 10));
-		//Debug.Log ("random loc " + vc.x + "   " + vc.y);
 	}
 
     private bool checkIfUsedVector()
@@ -55,8 +54,6 @@ public class EnemyAI : MonoBehaviour
                 is_valid = false;
                 break;}
         }
-
-     //   Debug.Log("checkValidVector ");
         return is_valid;
     }
 }

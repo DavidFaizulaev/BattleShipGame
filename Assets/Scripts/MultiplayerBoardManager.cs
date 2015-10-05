@@ -53,10 +53,10 @@ public class MultiplayerBoardManager : MonoBehaviour
             {
                 //you won the game
                 if (appwarp_logic_sc.game_result == 1)
-                    ConnStater.set_Game_Result(true);
+                    ConnStater.set_Game_Result(appwarp_logic_sc.game_result);
 
                 else
-                    ConnStater.set_Game_Result(false);
+                    ConnStater.set_Game_Result(appwarp_logic_sc.game_result);
             }
             else
             {
@@ -69,7 +69,7 @@ public class MultiplayerBoardManager : MonoBehaviour
             turn_msg.text = "Your turn - try to attack the enemies ships";
 
         if ((first_Completion) && (!appwarp_logic_sc.IsItMine()))
-            turn_msg.text = "Opponent turn - will now try attack your ships";
+            turn_msg.text = "Opponent turn - will now try attacking your ships";
     }
 
     public void OnButtonPressed(Button btn)

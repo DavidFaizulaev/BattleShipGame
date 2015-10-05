@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿//Unity course Summer 2015 - David Faizulaev
+using UnityEngine;
 using System.Collections;
 
 //class validates input both user and AI. To make sure that ship creation is done correctly.

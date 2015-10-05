@@ -5,14 +5,14 @@ using UnityEngine.UI; // we need This namespace in order to access UI elements w
 
 //This class is in charge of regulating the turns between the AI and the player.
 //variables indicate whose turn is it and valid x,y coordinates for last successful AI attack.
-public class Turn : MonoBehaviour
+public class TurnManager : MonoBehaviour
 {
 	public static bool Pturn;
 	public static bool AIturn;
 	public static bool Pwon;
 	public static bool AIwon;
-	private static Turn instance;
-	private static GameObject endgamecanvas;
+    private static TurnManager instance;
+    private static GameObject endgamecanvas;
 
     public static int last_valid_x;
     public static int last_valid_y;
@@ -27,7 +27,7 @@ public class Turn : MonoBehaviour
         last_valid_x = (-1);
         last_valid_y = (-1);
 
-		endgamecanvas = GameObject.Find ("WinnerCanvas");
+        endgamecanvas = GameObject.Find ("WinnerCanvas");
 		endgamecanvas.GetComponent<Canvas> ().enabled=false;
 	}
 

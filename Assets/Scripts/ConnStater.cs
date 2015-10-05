@@ -2,12 +2,13 @@
 using UnityEngine;
 using System.Collections;
 
-//This is an aid class, which holds static variables in regards to the connection state, login and so on.
+//This is an utility class, which holds static variables in regards to the connection state, login and so on.
 public class ConnStater : MonoBehaviour {
 
     private static bool login_ready;
     private static bool connection_status;
     private static string usrnm;
+    private static GameObject endgamecanvas;
 
 	// Use this for initialization
 	void Start () 
@@ -15,6 +16,9 @@ public class ConnStater : MonoBehaviour {
         login_ready = false;
         connection_status = false;
         usrnm = "";
+
+        endgamecanvas = GameObject.Find("WinnerCanvas");
+        endgamecanvas.GetComponent<Canvas>().enabled = false;
 	}
 	
     public static void Set_login_ready (bool state,string usr_name)
@@ -43,12 +47,17 @@ public class ConnStater : MonoBehaviour {
         return usrnm;
     }
 
-    //true = you won, false = you lost
-    public static void set_Game_Result (bool b)
+    //Game over
+    //winner code - 1 - player won
+    //winner code - 2 - oppponet won
+    public static void set_Game_Result (int winner_code)
     {
-         if(b)
+        if (winner_code == 1)
              Debug.Log("Congratulations, You've won the game!");
          else
              Debug.Log("Too bad, You've lost the game!");
+        
+         endgamecanvas.GetComponent<Canvas>().enabled = true;
+         endgamecanvas.GetComponent<Endgamecanvas>().DisplayCanvas(winner_code);
     }
 }

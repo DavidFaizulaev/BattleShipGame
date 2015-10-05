@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿//Unity course Summer 2015 - David Faizulaev
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; // we need This namespace in order to access UI elements within our script
 using System.Collections;
@@ -29,10 +30,10 @@ public class Multi_UI : MonoBehaviour
         string var_username = username.text.ToString();
         var regex_sp_chrs = new Regex("^[a-zA-Z0-9 ]*$");
 
-        if ((regex_sp_chrs.IsMatch(var_username))||(var_username.Length < 5) || (var_username.Length > 50))
+        if ((!regex_sp_chrs.IsMatch(var_username))||(var_username.Length < 5) || (var_username.Length > 50))
         {
             Debug.Log("no good");
-            response_msg.text = "Invalid Input -\n Username must be at least 5 charachters long \nUsername can be maximum of 50 charachters \nUsername cannot contain any contains any special characters like !,@,#,$,%,^,&,*,";
+            response_msg.text = "Invalid Input -\n Username must be at least 5 charachters long \nUsername can be maximum of 50 charachters \nUsername cannot contain any special characters like !,@,#,$,%,^,&,*,";
             MsgPanel.SetActive(true);
         }
         else
@@ -48,7 +49,7 @@ public class Multi_UI : MonoBehaviour
     //coroutine to wait 12 seconds before starting
     private IEnumerator Wait()
     {
-        yield return new WaitForSeconds(7.0f);
+        yield return new WaitForSeconds(5.0f);
         if (ConnStater.Get_connection_status())
         {
             MsgPanel.SetActive(false);
