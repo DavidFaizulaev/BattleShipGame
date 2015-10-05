@@ -16,6 +16,8 @@ public class Multi_UI : MonoBehaviour
     public InputField username;
 
     public Button connect_btn;
+    public Button exit_btn;
+
     public Text response_msg;
 
     void Start()
@@ -58,6 +60,12 @@ public class Multi_UI : MonoBehaviour
             Intro_panel.SetActive(true);
         }
         
+    }
+
+    public void QuitGamePress() //This function will be used on our "Exit Game" button
+    {
+        Debug.Log("ExitGamePress");
+        Application.Quit(); //This will quit our game.  
     }
 }
 
