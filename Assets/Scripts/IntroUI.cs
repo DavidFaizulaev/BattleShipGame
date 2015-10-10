@@ -30,14 +30,14 @@ public class IntroUI : MonoBehaviour
         this.StartCoroutine(Wait());
     }
 
-    //coroutine to wait 12 seconds before starting
+    //coroutine to wait 7 seconds before starting
     private IEnumerator Wait()
     {
         Debug.Log("waiting for 12 seconds before starting the level");
-        yield return new WaitForSeconds(12.0f);
+        yield return new WaitForSeconds(7.0f);
         Intro_panel.SetActive(false);
         exit_btn.enabled = true;
-        Debug.Log("finished waiting for 12 seconds before starting the level");
+        Debug.Log("finished waiting for 7 seconds before starting the level");
     }
 
     public void QuitGamePress() //This function will be used on our "Exit Game" button

@@ -285,8 +285,7 @@ public class SC_Logic : MonoBehaviour {
 	
 	public void OnPrivateUpdateReceived(string sender, byte[] eventObj, bool fromUdp)
 	{
-		//Debug.Log("OnPrivateUpdateReceived" + " " + messageReceived);
-	}
+    }
 	
 	public void OnGameStarted(string sender, string roomId, string nextTurn)
 	{
