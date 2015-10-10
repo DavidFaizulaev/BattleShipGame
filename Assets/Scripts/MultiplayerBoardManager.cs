@@ -37,39 +37,12 @@ public class MultiplayerBoardManager : MonoBehaviour
         appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
 
         if (appwarp_logic_sc.IsItMine())
-            turn_msg.text = "Your turn - Place 2 battleships on your game board\n \t\tFirst of 4 squars \n\t\tSecond of 3 squars";
+            turn_msg.text = "Your turn - Place " + SgameInfo.max_number_of_ships +" battleships on your game board\n \t\tFirst of 4 squars \n\t\tSecond of 3 squars and so on";
 
         else
-            turn_msg.text = "Opponent turn - Places 2 battleships on their game board";
+            turn_msg.text = "Opponent turn - Places " + SgameInfo.max_number_of_ships + " battleships on their game board";
 
         Debug.Log("done start in pbm");
-    }
-
-    void Update()
-    {
-        if (appwarp_logic_sc.updateboards)
-        {
-            if (appwarp_logic_sc.game_result != (-9999))
-            {
-                //you won the game
-                if (appwarp_logic_sc.game_result == 1)
-                    ConnStater.set_Game_Result(appwarp_logic_sc.game_result);
-
-                else
-                    ConnStater.set_Game_Result(appwarp_logic_sc.game_result);
-            }
-            else
-            {
-                EnemyMove(appwarp_logic_sc.enemy_move);
-                appwarp_logic_sc.updateboards = false;
-            }
-        }
-
-        if((first_Completion)&&(appwarp_logic_sc.IsItMine()))
-            turn_msg.text = "Your turn - try to attack the enemies ships";
-
-        if ((first_Completion) && (!appwarp_logic_sc.IsItMine()))
-            turn_msg.text = "Opponent turn - will now try attacking your ships";
     }
 
     public void OnButtonPressed(Button btn)
@@ -95,27 +68,17 @@ public class MultiplayerBoardManager : MonoBehaviour
         {
             first_Completion = true;
             //message code - 2 - battleship creation complete - switch turn to other player.
-            turn_msg.text = "Your turn has ended - now changing turn to opponent";
+            turn_msg.text = "Your turn has ended - now changing turn to opponent, to place battleships on board";
             appwarp_logic_sc.MakeMyMove("2");
             Debug.Log("structure complete - change turn to other player");
         }
     }
 
     //Accessed by EnemyAI in order to try and hit a player's battlesip.
-    public void EnemyMove(string str)
+    public void EnemyMove(Vector2 vc)
     {
         //bool attck_result = allPlayerShips[0].ifexists(vc);
-        //if 'attck_result' is TRUE then the vector recieved marks a ship's location
-        //if (attck_result)
-
-        Vector2 vc;
-
-        int startInd = str.IndexOf("X:") + 2;
-        float aXPosition = float.Parse(str.Substring(startInd, str.IndexOf(" Y") - startInd));
-        startInd = str.IndexOf("Y:") + 2;
-        float aYPosition = float.Parse(str.Substring(startInd, str.IndexOf("}") - startInd));
-
-        vc = new Vector2(aXPosition, aYPosition);
+        //if 'GetAttackResult' is TRUE then the vector recieved marks a ship's location
 
         if (GetAttackResult(vc) != -1) 
         {
@@ -134,15 +97,13 @@ public class MultiplayerBoardManager : MonoBehaviour
                     {
                         //mark location as hit
                         b.image.color = new Color(Color.red.r, Color.red.g, Color.red.b, 1f);
-                      //  Turn.set_LastValidAttackCrods(vc);
                         hit_Counter++;
-                        appwarp_logic_sc.MakeMyMove("1");
+                        appwarp_logic_sc.MakeMyMove("AttackResultSuccess");
 
-                        //if (hit_Counter == SgameInfo.max_Ship_Size)
                         if (hit_Counter == SgameInfo.max_number_of_hits)
                         {
-                           Debug.Log("game over - AI won");
-                           appwarp_logic_sc.MakeMyMove("I won the game");
+                           Debug.Log("game over - opponent won");
+                           ConnStater.set_Game_Result(0);
                         }
                     }
                 }
@@ -164,7 +125,7 @@ public class MultiplayerBoardManager : MonoBehaviour
                     {
                         //mark location as missed attempt
                         b.image.color = new Color(Color.black.r, Color.black.g, Color.black.b, 1f);
-                        appwarp_logic_sc.MakeMyMove("0");
+                        appwarp_logic_sc.MakeMyMove("AttackResultMiss");
                     }
                 }
             }
@@ -194,5 +155,8 @@ public class MultiplayerBoardManager : MonoBehaviour
         return ship_indx;
     }
 
-    
+    public bool ShipsPlaced()
+    {
+        return first_Completion;
+    }
 }

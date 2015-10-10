@@ -20,6 +20,9 @@ public class Multi_UI : MonoBehaviour
 
     public Text response_msg;
 
+    private GameObject appwarp_logic;
+    private SC_Logic appwarp_logic_sc;
+
     void Start()
     {
         Debug.Log("load multi username UI");
@@ -48,7 +51,7 @@ public class Multi_UI : MonoBehaviour
         }
     }
 
-    //coroutine to wait 12 seconds before starting
+    //coroutine to wait before starting
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(5.0f);
@@ -58,8 +61,7 @@ public class Multi_UI : MonoBehaviour
             MultiPanel.SetActive(false);
             GamePanel.SetActive(true);
             Intro_panel.SetActive(true);
-        }
-        
+        }       
     }
 
     public void QuitGamePress() //This function will be used on our "Exit Game" button
@@ -68,4 +70,3 @@ public class Multi_UI : MonoBehaviour
         Application.Quit(); //This will quit our game.  
     }
 }
-

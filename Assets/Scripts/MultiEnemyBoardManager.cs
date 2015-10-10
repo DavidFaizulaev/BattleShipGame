@@ -14,23 +14,17 @@ public class MultiEnemyBoardManager : MonoBehaviour
     private GameObject appwarp_logic;
     private SC_Logic appwarp_logic_sc;
 
+    private int enemy_hit_Counter;
+
 	void Start ()
 	{
 		Debug.Log ("start in multi ebm");
         appwarp_logic = GameObject.Find("NetworkManager");
         appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
+        enemy_hit_Counter = 0;
         Debug.Log("done start in multi ebm");
 	}
 
-    void Update()
-    {
-        if (appwarp_logic_sc.updateattackresult)
-        {
-            appwarp_logic_sc.updateattackresult = false;
-            MarkAttackResult(appwarp_logic_sc.my_last_move);
-        }
-    }
-  
     public void OnButtonPressed(Button btn)
     {
 		Debug.Log ("in OnButtonPressed multi ebm");
@@ -48,17 +42,8 @@ public class MultiEnemyBoardManager : MonoBehaviour
 		}
 	}
 
-    private void MarkAttackResult(string str)
+    public void MarkAttackResult(Vector2 vc)
     {
-        Vector2 vc;
-
-        int startInd = str.IndexOf("X:") + 2;
-        float aXPosition = float.Parse(str.Substring(startInd, str.IndexOf(" Y") - startInd));
-        startInd = str.IndexOf("Y:") + 2;
-        float aYPosition = float.Parse(str.Substring(startInd, str.IndexOf("}") - startInd));
-
-        vc = new Vector2(aXPosition, aYPosition);
-
         //attack was success
         if (appwarp_logic_sc.my_enemy_attack_res == 1)
         {
@@ -73,6 +58,13 @@ public class MultiEnemyBoardManager : MonoBehaviour
                     {
                         //mark location as hit
                         b.image.color = new Color(Color.red.r, Color.red.g, Color.red.b, 1f);
+                        enemy_hit_Counter++;
+                        
+                        if (enemy_hit_Counter == SgameInfo.max_number_of_hits)
+                        {
+                            Debug.Log("game over - U won");
+                            ConnStater.set_Game_Result(1);
+                        }
                     }
                 }
             }
@@ -99,5 +91,4 @@ public class MultiEnemyBoardManager : MonoBehaviour
             }
         }
     }
-
 }

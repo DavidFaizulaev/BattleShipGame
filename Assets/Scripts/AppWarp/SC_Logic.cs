@@ -22,6 +22,7 @@ public class SC_Logic : MonoBehaviour {
     //true  = joined room
     private bool created_or_joined = false;
 	private bool isMyTurn = false;
+    private bool myPlayerBoard_Ready = false;
     
     public bool updateboards = false;
     public bool updateattackresult = false;
@@ -29,7 +30,15 @@ public class SC_Logic : MonoBehaviour {
     public string my_last_move;
     public int my_enemy_attack_res;
     public int game_result;
- 
+
+    private GameObject myPlayerBoard;
+    private MultiplayerBoardManager myPlayerBoard_script;
+
+    private GameObject enemyPlayerBoard;
+    private MultiEnemyBoardManager enemyPlayerBoard_script;
+
+    private Vector2 vc;
+
     void OnEnable()
 	{
             SC_Listener_App42.OnExceptionFromApp42 += OnExceptionFromApp42;
@@ -89,17 +98,40 @@ public class SC_Logic : MonoBehaviour {
         SC_AppWarpKit.WarpInit(apiKey,secretKey);
 
         game_result = -9999;
+        myPlayerBoard = GameObject.Find("MyBoard");
+        myPlayerBoard_script = myPlayerBoard.GetComponent<MultiplayerBoardManager>();
+        myPlayerBoard_Ready = true;
+
+        enemyPlayerBoard = GameObject.Find("EnemyBoard");
+        enemyPlayerBoard_script = enemyPlayerBoard.GetComponent<MultiEnemyBoardManager>();
 	}
 	
 	void Update () 
 	{
-        if((ConnStater.Get_login_ready())&&(ConnStater.Get_connection_status()==false))
+        if (ConnStater.Get_connection_status() == false)
         {
-            userName = ConnStater.get_Username();
-            SC_AppWarpKit.connectToAppWarp(userName);
+            if (ConnStater.Get_login_ready())
+            {
+                userName = ConnStater.get_Username();
+                SC_AppWarpKit.connectToAppWarp(userName);
+            }
+        }
+
+        if (myPlayerBoard_Ready)
+        {
+            if (IsItMine())
+            {
+                if (myPlayerBoard_script.ShipsPlaced())
+                        myPlayerBoard_script.turn_msg.text = "Your turn - try to attack the enemies ships";
+            }
+
+            if (!IsItMine())
+            {
+                if (myPlayerBoard_script.ShipsPlaced())
+                        myPlayerBoard_script.turn_msg.text = "Opponent's turn - will now try attacking your ships";
+            }
         }
 	}
-
 	
 	public void OnExceptionFromApp42(Exception error)
 	{
@@ -193,6 +225,7 @@ public class SC_Logic : MonoBehaviour {
 	
 	public void OnGetMatchedRoomsDone(MatchedRoomsEvent eventObj)
 	{
+       
 		Debug.Log("OnGetMatchedRoomsDone : " + eventObj.getResult());
 		rooms = new List<string>();
 		foreach (var roomData in eventObj.getRoomsData())
@@ -213,7 +246,7 @@ public class SC_Logic : MonoBehaviour {
         else
         {
             Debug.Log("no room exists - need to create");
-            SC_AppWarpKit.CreateTurnBaseRoom("BattleShips", userName, 2, null, 60);
+            SC_AppWarpKit.CreateTurnBaseRoom("BattleShips"+UnityEngine.Random.Range(0,1000), userName, 2, null, 60);
         }
 	}
 	
@@ -234,8 +267,10 @@ public class SC_Logic : MonoBehaviour {
 		Debug.Log("OnUserJoinRoom" + " " + eventObj.getRoomOwner() + " User connected" + userName);
 		
         //checking if room was created by other user - if so, it will be set as the opponent.
-        if(eventObj.getRoomOwner() != userName)
-                opponentName = eventObj.getRoomOwner();
+        if (eventObj.getRoomOwner() != userName)
+        {
+            opponentName = eventObj.getRoomOwner();
+        }
 
         //If game room was created by user - then he should initiate game start
         if (!created_or_joined)
@@ -268,8 +303,8 @@ public class SC_Logic : MonoBehaviour {
 		Debug.Log("OnMoveCompleted" + " " + move.getNextTurn());
         if (move.getNextTurn() == userName)
         {
-            isMyTurn = true;
             ParseEnemyMove(move.getMoveData());
+            isMyTurn = true;
         }
         else isMyTurn = false;
 	}
@@ -281,20 +316,20 @@ public class SC_Logic : MonoBehaviour {
 
     public void MakeMyMove(string str)
     {
-        Debug.Log("Move turn !!");
+        Debug.Log("MakeMyMove !!");
         my_last_move = str;
         SC_AppWarpKit.sendMove(str);
     }
 
     private void ParseEnemyMove(string str)
     {
-        if (str == null) str = "";
-
+        //if (str == null) str = "";
+        Debug.Log("enemy move!!!!!!!!!!!!!!!!!!!!!!         "+str);
         //enemy tried to attack battleship
         if ((str.Contains("X")&&str.Contains("Y")))
         {
-            updateboards = true;
-            enemy_move = str;
+            parseToVector(str);
+            myPlayerBoard_script.EnemyMove(vc);
         }
         else
         {
@@ -302,26 +337,33 @@ public class SC_Logic : MonoBehaviour {
             if (str.Contains("2"))
                 Debug.Log("other player completed ship structure");
 
-            if (str.Contains("1"))
+            else
             {
-                Debug.Log("previous attack attempt success");
-                my_enemy_attack_res = 1;
-                updateattackresult = true;
-            }
+                if (str.Contains("AttackResultSuccess"))
+                {
+                    Debug.Log("previous attack attempt success");
+                    parseToVector(str);
+                    enemyPlayerBoard_script.MarkAttackResult(vc);
+                }
 
-            if (str.Contains("0"))
-            {
-                Debug.Log("previous attack attempt failed");
-                my_enemy_attack_res = 0;
-                updateattackresult = true;
-            }
-
-            if (str.Contains("you won"))
-            {
-                Debug.Log("I won the game");
-                game_result = 1;
-                updateattackresult = true;
+                if (str.Contains("AttackResultMiss"))
+                {
+                    Debug.Log("previous attack attempt failed");
+                    parseToVector(str);
+                    enemyPlayerBoard_script.MarkAttackResult(vc);
+                }
             }
         }
+    }
+
+    private void parseToVector(string str) 
+    {
+        int startInd = str.IndexOf("X:") + 2;
+        float aXPosition = float.Parse(str.Substring(startInd, str.IndexOf(" Y") - startInd));//x
+        startInd = str.IndexOf("Y:") + 2;
+        float aYPosition = float.Parse(str.Substring(startInd, str.IndexOf("}") - startInd));//y
+
+        vc = new Vector2(aXPosition, aYPosition);
+        Debug.Log("xxxxxxxxxxxxxxxxxxxxxxxxxx"+vc.ToString());
     }
 }
