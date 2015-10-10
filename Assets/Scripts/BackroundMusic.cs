@@ -12,13 +12,14 @@ public class BackroundMusic : MonoBehaviour {
 		GetComponent<AudioSource>().Play(); 
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if(!GetComponent<AudioSource>().isPlaying)
-			playRandomMusic();
+	// Method is called once per frame
+	public void CheckifPlaying () 
+    {
+        if (!GetComponent<AudioSource>().isPlaying)
+                playRandomMusic();
 	}
 	
-	void playRandomMusic() {
+	private void playRandomMusic() {
 		GetComponent<AudioSource>().clip = myMusic[Random.Range(0,(myMusic.Length-1))] as AudioClip;
 		GetComponent<AudioSource>().Play();
 	}

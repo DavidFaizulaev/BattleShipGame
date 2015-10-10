@@ -37,6 +37,9 @@ public class SC_Logic : MonoBehaviour {
     private GameObject enemyPlayerBoard;
     private MultiEnemyBoardManager enemyPlayerBoard_script;
 
+    private GameObject bckgrnd_music;
+    private BackroundMusic bckgrnd_music_sc;
+
     private Vector2 vc;
 
     void OnEnable()
@@ -108,6 +111,9 @@ public class SC_Logic : MonoBehaviour {
 	
 	void Update () 
 	{
+
+        //bckgrnd_music_sc.CheckifPlaying();
+
         if (ConnStater.Get_connection_status() == false)
         {
             if (ConnStater.Get_login_ready())
