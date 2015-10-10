@@ -12,9 +12,9 @@ public class SgameInfo : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        max_number_of_ships = 2;
+        max_number_of_ships = 4;
         max_Ship_Size = 4;
-        max_number_of_hits = 7;
+        max_number_of_hits = 10;
     }
 }
 
