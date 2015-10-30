@@ -64,4 +64,3 @@ public class TurnManager : MonoBehaviour
         last_valid_y = (int)v.y;
     }
 }
-

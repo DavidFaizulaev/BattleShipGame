@@ -69,7 +69,7 @@ public class MultiplayerBoardManager : MonoBehaviour
             first_Completion = true;
             //message code - 2 - battleship creation complete - switch turn to other player.
             turn_msg.text = "Your turn has ended - now changing turn to opponent, to place battleships on board";
-            appwarp_logic_sc.MakeMyMove("2");
+            appwarp_logic_sc.MakeMyMove("structure complete");
             Debug.Log("structure complete - change turn to other player");
         }
     }

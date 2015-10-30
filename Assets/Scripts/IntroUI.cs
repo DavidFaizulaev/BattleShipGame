@@ -8,6 +8,7 @@ public class IntroUI : MonoBehaviour
 {
     private string intro_msg;
     public GameObject Intro_panel;
+    public GameObject GameGridPanel;
     public Button exit_btn;
     public Text instrcs;
     
@@ -34,8 +35,9 @@ public class IntroUI : MonoBehaviour
     private IEnumerator Wait()
     {
         Debug.Log("waiting for 12 seconds before starting the level");
-        yield return new WaitForSeconds(7.0f);
+        yield return new WaitForSeconds(0.0f);
         Intro_panel.SetActive(false);
+        GameGridPanel.SetActive(true);
         exit_btn.enabled = true;
         Debug.Log("finished waiting for 7 seconds before starting the level");
     }

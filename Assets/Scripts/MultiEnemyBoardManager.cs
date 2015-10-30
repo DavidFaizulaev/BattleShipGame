@@ -31,13 +31,14 @@ public class MultiEnemyBoardManager : MonoBehaviour
 
         string str_move_vec="";
 
-		if (appwarp_logic_sc.IsItMine()) {
+		if ((appwarp_logic_sc.IsItMine())&&(ConnStater.attacker)) {
 
 			Vector2 btnPos = btn.GetComponent<ButtonInfo> ().position;
 
-			Debug.Log ("vector x " + btnPos.x + "vector y " + btnPos.y);
+			Debug.Log ("my attack move vector x " + btnPos.x + "vector y " + btnPos.y);
 			//checking if boat structure is not complete yet and if it's the player's turn to attack
-            str_move_vec = "{X:" + btnPos.x + "Y:" + btnPos.y + "}";
+            str_move_vec = "{EnemyMove X:" + btnPos.x + " Y:" + btnPos.y + "}";
+            ConnStater.attacker = false;
             appwarp_logic_sc.MakeMyMove(str_move_vec);
 		}
 	}

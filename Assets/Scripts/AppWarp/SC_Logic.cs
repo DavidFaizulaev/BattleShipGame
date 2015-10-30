@@ -6,6 +6,7 @@ using com.shephertz.app42.gaming.multiplayer.client.events;
 using com.shephertz.app42.gaming.multiplayer.client.command;
 using com.shephertz.app42.gaming.multiplayer.client.listener;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 //This class is responsible for performing the connection to the Appwarp server, create/join a room and send 'moves' respectivly between the players.
 public class SC_Logic : MonoBehaviour {
@@ -101,12 +102,14 @@ public class SC_Logic : MonoBehaviour {
         SC_AppWarpKit.WarpInit(apiKey,secretKey);
 
         game_result = -9999;
-        myPlayerBoard = GameObject.Find("MyBoard");
+     /*   myPlayerBoard = GameObject.Find("MyBoard");
         myPlayerBoard_script = myPlayerBoard.GetComponent<MultiplayerBoardManager>();
+
         myPlayerBoard_Ready = true;
 
         enemyPlayerBoard = GameObject.Find("EnemyBoard");
         enemyPlayerBoard_script = enemyPlayerBoard.GetComponent<MultiEnemyBoardManager>();
+        */
 	}
 	
 	void Update () 
@@ -123,7 +126,7 @@ public class SC_Logic : MonoBehaviour {
             }
         }
 
-        if (myPlayerBoard_Ready)
+      /*  if (myPlayerBoard_Ready)
         {
             if (IsItMine())
             {
@@ -136,7 +139,7 @@ public class SC_Logic : MonoBehaviour {
                 if (myPlayerBoard_script.ShipsPlaced())
                         myPlayerBoard_script.turn_msg.text = "Opponent's turn - will now try attacking your ships";
             }
-        }
+        }*/
 	}
 	
 	public void OnExceptionFromApp42(Exception error)
@@ -150,6 +153,15 @@ public class SC_Logic : MonoBehaviour {
         {
             Debug.Log("onConnectToAppWarp " + eventObj.getResult());
             ConnStater.Set__connection_status(true);
+
+            myPlayerBoard = GameObject.Find("MyBoard");
+            //myPlayerBoard_script = myPlayerBoard.GetComponent<MultiplayerBoardManager>();
+            myPlayerBoard_script = (MultiplayerBoardManager)myPlayerBoard.GetComponent(typeof(MultiplayerBoardManager));
+            myPlayerBoard_Ready = true;
+
+            enemyPlayerBoard = GameObject.Find("EnemyBoard");
+            enemyPlayerBoard_script = enemyPlayerBoard.GetComponent<MultiEnemyBoardManager>();
+
             SC_AppWarpKit.GetRoomsInRange(1, 1);
         }
 	}
@@ -333,14 +345,21 @@ public class SC_Logic : MonoBehaviour {
         //enemy tried to attack battleship
         if ((str.Contains("X")&&str.Contains("Y")))
         {
+            ConnStater.attacker = false;
+           // myPlayerBoard_script.turn_msg.text = "Opponnet's turn - To attack";
             parseToVector(str);
             myPlayerBoard_script.EnemyMove(vc);
         }
         else
         {
             //other player completed ship structure
-            if (str.Contains("2"))
+            if (str.Contains("structure complete"))
+            {
                 Debug.Log("other player completed ship structure");
+                isMyTurn = true;
+                ConnStater.attacker = true;
+                //myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";
+            }
 
             else
             {
@@ -363,12 +382,17 @@ public class SC_Logic : MonoBehaviour {
 
     private void parseToVector(string str) 
     {
-        int startInd = str.IndexOf("X:") + 2;
-        float aXPosition = float.Parse(str.Substring(startInd, str.IndexOf(" Y") - startInd));//x
-        startInd = str.IndexOf("Y:") + 2;
-        float aYPosition = float.Parse(str.Substring(startInd, str.IndexOf("}") - startInd));//y
+
+        int aXPosition=-1;
+        int aYPosition=-1;
+        var regex_sp_chrs = new Regex(@"X:(?<X>10|\d)\s+Y:(?<Y>10|\d)");
+        var ms = regex_sp_chrs.Matches(str);
+        foreach (Match m in ms)
+        {
+            aXPosition = (Int32.Parse(m.Groups["X"].Value));
+            aYPosition = (Int32.Parse(m.Groups["Y"].Value));
+        }
 
         vc = new Vector2(aXPosition, aYPosition);
-        Debug.Log("xxxxxxxxxxxxxxxxxxxxxxxxxx"+vc.ToString());
     }
 }
