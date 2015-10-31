@@ -71,11 +71,11 @@ public class MultiEnemyBoardManager : MonoBehaviour
             //attack failed
             if (!atc_result)
             {
-                Debug.Log("in MarkAttackResult result is false");
+                //Debug.Log("in MarkAttackResult result is false");
                 all_buttons = this.GetComponentsInChildren<Button>();
                 foreach (Button b in all_buttons)
                 {
-                    if ((b.GetComponent<ButtonInfo>().position.x == vc.x) &&
+                   if ((b.GetComponent<ButtonInfo>().position.x == vc.x) &&
                    (b.GetComponent<ButtonInfo>().position.y == vc.y))
                     {
                         Debug.Log("/checking if location has been already marked as missed");

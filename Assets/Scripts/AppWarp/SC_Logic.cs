@@ -103,7 +103,6 @@ public class SC_Logic : MonoBehaviour
 
     void Update()
     {
-
         //bckgrnd_music_sc.CheckifPlaying();
 
         if (ConnStater.Get_connection_status() == false)
@@ -161,8 +160,6 @@ public class SC_Logic : MonoBehaviour
         {
             Debug.Log("onSubscribeRoomDone : " + eventObj.getResult());
             myPlayerBoard_script.turn_msg.text = "Waiting for second player to join";
-          /*  if (!created_or_joined)
-                SC_AppWarpKit.StartGame();*/
         }
     }
 
@@ -202,7 +199,7 @@ public class SC_Logic : MonoBehaviour
     {
     }
 
-    //onky room creator will get that
+    //only room creator will get that
     public void OnStartGameDone(byte result)
     {
         Debug.Log("OnStartGameDone : " + result);
@@ -328,7 +325,7 @@ public class SC_Logic : MonoBehaviour
         if (str.Contains("EnemyMove"))
         {
             ConnStater.canWeFight = true;
-            myPlayerBoard_script.turn_msg.text = "Opponnet's turn - To attack";
+            myPlayerBoard_script.turn_msg.text = "Opponnet's turn to attack";
             parseToVector(str);
             myPlayerBoard_script.EnemyMove(vc);
         }
@@ -357,6 +354,7 @@ public class SC_Logic : MonoBehaviour
                     Debug.Log("value of isMyTurn " + isMyTurn);
                     parseToVector(str);
                     enemyPlayerBoard_script.MarkAttackResult(vc,true);
+                    myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";
                     Debug.Log("MakeMyMove MarkedAttackResult ");
                     MakeMyMove("MarkedAttackResult");
                 }
@@ -368,9 +366,16 @@ public class SC_Logic : MonoBehaviour
                         Debug.Log("previous attack attempt failed");
                         Debug.Log("value of isMyTurn " + isMyTurn);
                         parseToVector(str);
-                        enemyPlayerBoard_script.MarkAttackResult(vc,false);
+                        enemyPlayerBoard_script.MarkAttackResult(vc, false);
+                        myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";
                         Debug.Log("MakeMyMove MarkedAttackResult ");
                         MakeMyMove("MarkedAttackResult");
+                    }
+
+                    else
+                    {
+                        if(str.Contains("MarkedAttackResult"))
+                            myPlayerBoard_script.turn_msg.text = "Opponnet's turn to attack";
                     }
                 }
             }
