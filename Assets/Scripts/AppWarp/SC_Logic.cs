@@ -28,15 +28,12 @@ public class SC_Logic : MonoBehaviour {
     public bool updateboards = false;
     public bool updateattackresult = false;
     public string enemy_move;
-    public string my_last_move;
     public int my_enemy_attack_res;
     public int game_result;
 
-    private GameObject myPlayerBoard;
-    private MultiplayerBoardManager myPlayerBoard_script;
+    public MultiplayerBoardManager myPlayerBoard_script;
 
-    private GameObject enemyPlayerBoard;
-    private MultiEnemyBoardManager enemyPlayerBoard_script;
+    public MultiEnemyBoardManager enemyPlayerBoard_script;
 
     private GameObject bckgrnd_music;
     private BackroundMusic bckgrnd_music_sc;
@@ -102,14 +99,6 @@ public class SC_Logic : MonoBehaviour {
         SC_AppWarpKit.WarpInit(apiKey,secretKey);
 
         game_result = -9999;
-     /*   myPlayerBoard = GameObject.Find("MyBoard");
-        myPlayerBoard_script = myPlayerBoard.GetComponent<MultiplayerBoardManager>();
-
-        myPlayerBoard_Ready = true;
-
-        enemyPlayerBoard = GameObject.Find("EnemyBoard");
-        enemyPlayerBoard_script = enemyPlayerBoard.GetComponent<MultiEnemyBoardManager>();
-        */
 	}
 	
 	void Update () 
@@ -125,21 +114,6 @@ public class SC_Logic : MonoBehaviour {
                 SC_AppWarpKit.connectToAppWarp(userName);
             }
         }
-
-      /*  if (myPlayerBoard_Ready)
-        {
-            if (IsItMine())
-            {
-                if (myPlayerBoard_script.ShipsPlaced())
-                        myPlayerBoard_script.turn_msg.text = "Your turn - try to attack the enemies ships";
-            }
-
-            if (!IsItMine())
-            {
-                if (myPlayerBoard_script.ShipsPlaced())
-                        myPlayerBoard_script.turn_msg.text = "Opponent's turn - will now try attacking your ships";
-            }
-        }*/
 	}
 	
 	public void OnExceptionFromApp42(Exception error)
@@ -154,14 +128,8 @@ public class SC_Logic : MonoBehaviour {
             Debug.Log("onConnectToAppWarp " + eventObj.getResult());
             ConnStater.Set__connection_status(true);
 
-            myPlayerBoard = GameObject.Find("MyBoard");
-            //myPlayerBoard_script = myPlayerBoard.GetComponent<MultiplayerBoardManager>();
-            myPlayerBoard_script = (MultiplayerBoardManager)myPlayerBoard.GetComponent(typeof(MultiplayerBoardManager));
             myPlayerBoard_Ready = true;
-
-            enemyPlayerBoard = GameObject.Find("EnemyBoard");
-            enemyPlayerBoard_script = enemyPlayerBoard.GetComponent<MultiEnemyBoardManager>();
-
+ 
             SC_AppWarpKit.GetRoomsInRange(1, 1);
         }
 	}
@@ -208,7 +176,10 @@ public class SC_Logic : MonoBehaviour {
 		{
 			Debug.Log("OnJoinToRoom " + eventObj.getResult());
 			opponentName = eventObj.getData().getRoomOwner();
-			Debug.Log("roomId: " + roomId + ", OpponentName: " + opponentName);
+
+            if(opponentName!=userName)
+			        Debug.Log("roomId: " + roomId + ", OpponentName: " + opponentName);
+
             SC_AppWarpKit.RegisterToRoom(roomId);
 		}
 		else
@@ -317,13 +288,10 @@ public class SC_Logic : MonoBehaviour {
 
 	public void OnMoveCompleted(MoveEvent move)
 	{     
-		Debug.Log("OnMoveCompleted" + " " + move.getNextTurn());
-        if (move.getNextTurn() == userName)
-        {
-            ParseEnemyMove(move.getMoveData());
-            isMyTurn = true;
-        }
-        else isMyTurn = false;
+		Debug.Log("OnMoveCompleted next turn is of player" + " " + move.getNextTurn());
+        
+        Debug.Log("received move   " + move.getMoveData().ToString());
+        ParseEnemyMove(move.getMoveData());
 	}
 
     public bool IsItMine()
@@ -333,20 +301,21 @@ public class SC_Logic : MonoBehaviour {
 
     public void MakeMyMove(string str)
     {
-        Debug.Log("MakeMyMove !!");
-        my_last_move = str;
+        Debug.Log("MakeMyMove !!   " +str);
+        isMyTurn = false;
         SC_AppWarpKit.sendMove(str);
     }
 
     private void ParseEnemyMove(string str)
     {
-        //if (str == null) str = "";
         Debug.Log("enemy move!!!!!!!!!!!!!!!!!!!!!!         "+str);
+        Debug.Log("setting turn to me - true");
+        isMyTurn = true;
+
         //enemy tried to attack battleship
-        if ((str.Contains("X")&&str.Contains("Y")))
+        if (str.Contains("EnemyMove"))
         {
-            ConnStater.attacker = false;
-           // myPlayerBoard_script.turn_msg.text = "Opponnet's turn - To attack";
+            myPlayerBoard_script.turn_msg.text = "Opponnet's turn - To attack";
             parseToVector(str);
             myPlayerBoard_script.EnemyMove(vc);
         }
@@ -356,9 +325,10 @@ public class SC_Logic : MonoBehaviour {
             if (str.Contains("structure complete"))
             {
                 Debug.Log("other player completed ship structure");
-                isMyTurn = true;
-                ConnStater.attacker = true;
-                //myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";
+                if(myPlayerBoard_script.struct_state)
+                    ConnStater.canWeFight = true;
+                
+                myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";
             }
 
             else
@@ -382,7 +352,6 @@ public class SC_Logic : MonoBehaviour {
 
     private void parseToVector(string str) 
     {
-
         int aXPosition=-1;
         int aYPosition=-1;
         var regex_sp_chrs = new Regex(@"X:(?<X>10|\d)\s+Y:(?<Y>10|\d)");

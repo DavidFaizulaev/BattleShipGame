@@ -9,16 +9,15 @@ public class ConnStater : MonoBehaviour {
     private static bool connection_status;
     private static string usrnm;
     private static GameObject endgamecanvas;
-    public static bool attacker; //true - I'm attacking, Else - False
+    public static bool canWeFight;
 
 	// Use this for initialization
 	void Start () 
     {
         login_ready = false;
         connection_status = false;
-        attacker = false;
         usrnm = "";
-
+        canWeFight = false;
         endgamecanvas = GameObject.Find("WinnerCanvas");
         endgamecanvas.GetComponent<Canvas>().enabled = false;
 	}

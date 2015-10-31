@@ -11,16 +11,16 @@ public class MultiEnemyBoardManager : MonoBehaviour
 {
     private Button[] all_buttons;
 
-    private GameObject appwarp_logic;
-    private SC_Logic appwarp_logic_sc;
+    //private GameObject appwarp_logic;
+    public SC_Logic appwarp_logic_sc;
 
     private int enemy_hit_Counter;
 
 	void Start ()
 	{
 		Debug.Log ("start in multi ebm");
-        appwarp_logic = GameObject.Find("NetworkManager");
-        appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
+      //  appwarp_logic = GameObject.Find("NetworkManager");
+       // appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
         enemy_hit_Counter = 0;
         Debug.Log("done start in multi ebm");
 	}
@@ -31,20 +31,20 @@ public class MultiEnemyBoardManager : MonoBehaviour
 
         string str_move_vec="";
 
-		if ((appwarp_logic_sc.IsItMine())&&(ConnStater.attacker)) {
-
+		if ((appwarp_logic_sc.IsItMine())&&ConnStater.canWeFight)
+        {
 			Vector2 btnPos = btn.GetComponent<ButtonInfo> ().position;
 
 			Debug.Log ("my attack move vector x " + btnPos.x + "vector y " + btnPos.y);
 			//checking if boat structure is not complete yet and if it's the player's turn to attack
             str_move_vec = "{EnemyMove X:" + btnPos.x + " Y:" + btnPos.y + "}";
-            ConnStater.attacker = false;
             appwarp_logic_sc.MakeMyMove(str_move_vec);
 		}
 	}
 
     public void MarkAttackResult(Vector2 vc)
     {
+        Debug.Log("MarkAttackResult enemy move");
         //attack was success
         if (appwarp_logic_sc.my_enemy_attack_res == 1)
         {
