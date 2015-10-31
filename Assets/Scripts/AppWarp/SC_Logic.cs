@@ -29,7 +29,6 @@ public class SC_Logic : MonoBehaviour
     public bool updateboards = false;
     public bool updateattackresult = false;
     public string enemy_move;
-    public int my_enemy_attack_res;
     public int game_result;
 
     public MultiplayerBoardManager myPlayerBoard_script;
@@ -297,10 +296,14 @@ public class SC_Logic : MonoBehaviour
 
     public void OnMoveCompleted(MoveEvent move)
     {
+        Debug.Log("move recieved from " + move.getSender());
         Debug.Log("OnMoveCompleted next turn is of player" + " " + move.getNextTurn());
-
-        Debug.Log("received move   " + move.getMoveData().ToString());
-        ParseEnemyMove(move.getMoveData());
+        
+        if (move.getSender() != userName)
+        {
+            Debug.Log("received move   " + move.getMoveData().ToString());
+            ParseEnemyMove(move.getMoveData());
+        }
     }
 
     public bool IsItMine()
@@ -351,15 +354,24 @@ public class SC_Logic : MonoBehaviour
                 if (str.Contains("AttackResultSuccess"))
                 {
                     Debug.Log("previous attack attempt success");
+                    Debug.Log("value of isMyTurn " + isMyTurn);
                     parseToVector(str);
-                    enemyPlayerBoard_script.MarkAttackResult(vc);
+                    enemyPlayerBoard_script.MarkAttackResult(vc,true);
+                    Debug.Log("MakeMyMove MarkedAttackResult ");
+                    MakeMyMove("MarkedAttackResult");
                 }
 
-                if (str.Contains("AttackResultMiss"))
+                else
                 {
-                    Debug.Log("previous attack attempt failed");
-                    parseToVector(str);
-                    enemyPlayerBoard_script.MarkAttackResult(vc);
+                    if (str.Contains("AttackResultMiss"))
+                    {
+                        Debug.Log("previous attack attempt failed");
+                        Debug.Log("value of isMyTurn " + isMyTurn);
+                        parseToVector(str);
+                        enemyPlayerBoard_script.MarkAttackResult(vc,false);
+                        Debug.Log("MakeMyMove MarkedAttackResult ");
+                        MakeMyMove("MarkedAttackResult");
+                    }
                 }
             }
         }

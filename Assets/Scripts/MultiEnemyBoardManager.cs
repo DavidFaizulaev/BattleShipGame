@@ -38,11 +38,11 @@ public class MultiEnemyBoardManager : MonoBehaviour
 		}
 	}
 
-    public void MarkAttackResult(Vector2 vc)
+    public void MarkAttackResult(Vector2 vc,bool atc_result)
     {
         Debug.Log("MarkAttackResult enemy move");
         //attack was success
-        if (appwarp_logic_sc.my_enemy_attack_res == 1)
+        if (atc_result)
         {
             all_buttons = this.GetComponentsInChildren<Button>();
             foreach (Button b in all_buttons)
@@ -69,18 +69,21 @@ public class MultiEnemyBoardManager : MonoBehaviour
         else
         {
             //attack failed
-            if (appwarp_logic_sc.my_enemy_attack_res == 0)
+            if (!atc_result)
             {
+                Debug.Log("in MarkAttackResult result is false");
                 all_buttons = this.GetComponentsInChildren<Button>();
                 foreach (Button b in all_buttons)
                 {
                     if ((b.GetComponent<ButtonInfo>().position.x == vc.x) &&
                    (b.GetComponent<ButtonInfo>().position.y == vc.y))
                     {
+                        Debug.Log("/checking if location has been already marked as missed");
                         //checking if location has been already marked as missed
                         if (b.image.color.Equals(Color.black) == false)
                         {
-                            //mark location as hit
+                            //mark location as miss
+                            Debug.Log("mark location as miss");
                             b.image.color = new Color(Color.black.r, Color.black.g, Color.black.b, 1f);
                         }
                     }
