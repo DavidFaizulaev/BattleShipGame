@@ -325,7 +325,7 @@ public class SC_Logic : MonoBehaviour {
             if (str.Contains("structure complete"))
             {
                 Debug.Log("other player completed ship structure");
-                if(myPlayerBoard_script.struct_state)
+                if (myPlayerBoard_script.first_Completion==true)
                     ConnStater.canWeFight = true;
                 
                 myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";

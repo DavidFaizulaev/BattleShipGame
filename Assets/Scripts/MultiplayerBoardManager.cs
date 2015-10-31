@@ -10,14 +10,11 @@ using UnityEngine.UI;
 public class MultiplayerBoardManager : MonoBehaviour
 {
     private BattleShip[] allPlayerShips;
- //   private GameObject appwarp_logic;
     public SC_Logic appwarp_logic_sc;
     private Button[] all_buttons;
-    private bool first_Completion;
+    public bool first_Completion;
     private int hit_Counter;
     private int curr_ship_indx;
-
-    public bool struct_state;
 
     public Text turn_msg;
 
@@ -26,7 +23,6 @@ public class MultiplayerBoardManager : MonoBehaviour
         hit_Counter = 0;
         first_Completion = false;
         curr_ship_indx = 0;
-        struct_state = false;
         allPlayerShips = new BattleShip[SgameInfo.max_number_of_ships];
 
         for (int i = 0; i < SgameInfo.max_number_of_ships; i++)
@@ -34,9 +30,6 @@ public class MultiplayerBoardManager : MonoBehaviour
            allPlayerShips[i] = new BattleShip();
            allPlayerShips[i].Init_Ship(SgameInfo.max_Ship_Size-i);
         }
-
-      //  appwarp_logic = GameObject.Find("NetworkManager");
-   //     appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
 
         if (appwarp_logic_sc.IsItMine())
             turn_msg.text = "Your turn - Place " + SgameInfo.max_number_of_ships +" battleships on your game board\n \t\tFirst of 4 squars \n\t\tSecond of 3 squars and so on";
@@ -50,12 +43,10 @@ public class MultiplayerBoardManager : MonoBehaviour
     public void OnButtonPressed(Button btn)
     {
         Vector2 btnPos = btn.GetComponent<ButtonInfo>().position;
-        Debug.Log("vector x " + btnPos.x + "vector y " + btnPos.y);
+        Debug.Log("MultiplayerBoardManager OnButtonPressed vector x " + btnPos.x + "vector y " + btnPos.y);
         //checking if boat structure is not complete yet and if it's the player's turn to build ship
 
-        struct_state = CheckStructure();
-
-        if ((appwarp_logic_sc.IsItMine()) && (struct_state == false))
+        if ((appwarp_logic_sc.IsItMine()) && (CheckStructure()))
         {
             if (allPlayerShips[curr_ship_indx].Set_Loc(btnPos))
             {
@@ -64,11 +55,11 @@ public class MultiplayerBoardManager : MonoBehaviour
             }
         }
 
-        if ((curr_ship_indx != (SgameInfo.max_number_of_ships - 1)) && (struct_state))
+        if ((curr_ship_indx != (SgameInfo.max_number_of_ships - 1)) && (CheckStructure()))
             curr_ship_indx++;
 
         //checking if boat structure is complete and transfer the turn to the AI.
-        if ((first_Completion == false) && (struct_state))
+        if ((first_Completion == false) && (CheckStructure()))
         {
             first_Completion = true;
             //message code - 2 - battleship creation complete - switch turn to other player.

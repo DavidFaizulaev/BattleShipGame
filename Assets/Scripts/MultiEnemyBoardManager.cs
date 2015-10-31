@@ -11,17 +11,13 @@ public class MultiEnemyBoardManager : MonoBehaviour
 {
     private Button[] all_buttons;
 
-    //private GameObject appwarp_logic;
     public SC_Logic appwarp_logic_sc;
 
     private int enemy_hit_Counter;
 
 	void Start ()
 	{
-		Debug.Log ("start in multi ebm");
-      //  appwarp_logic = GameObject.Find("NetworkManager");
-       // appwarp_logic_sc = appwarp_logic.GetComponent<SC_Logic>();
-        enemy_hit_Counter = 0;
+	    enemy_hit_Counter = 0;
         Debug.Log("done start in multi ebm");
 	}
 
