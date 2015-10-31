@@ -24,26 +24,20 @@ public class Multi_UI : MonoBehaviour
     private SC_Logic appwarp_logic_sc;
 
     void Start()
-    {
-        Debug.Log("load multi username UI");
-    }
+    {}
 
     public void connectPressed()
     {
-        Debug.Log("ConnectPressed");
-        
         string var_username = username.text.ToString();
         var regex_sp_chrs = new Regex("^[a-zA-Z0-9 ]*$");
 
         if ((!regex_sp_chrs.IsMatch(var_username))||(var_username.Length < 5) || (var_username.Length > 50))
         {
-            Debug.Log("no good");
             response_msg.text = "Invalid Input -\n Username must be at least 5 charachters long \nUsername can be maximum of 50 charachters \nUsername cannot contain any special characters like !,@,#,$,%,^,&,*,";
             MsgPanel.SetActive(true);
         }
         else
         {
-            Debug.Log("all good");
             response_msg.text = "Connecting to game server";
             MsgPanel.SetActive(true);
             ConnStater.Set_login_ready(true, var_username);
@@ -66,7 +60,6 @@ public class Multi_UI : MonoBehaviour
 
     public void QuitGamePress() //This function will be used on our "Exit Game" button
     {
-        Debug.Log("ExitGamePress");
         Application.Quit(); //This will quit our game.  
     }
 }

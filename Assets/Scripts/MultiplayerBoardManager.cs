@@ -31,12 +31,12 @@ public class MultiplayerBoardManager : MonoBehaviour
            allPlayerShips[i].Init_Ship(SgameInfo.max_Ship_Size-i);
         }
 
-        if (appwarp_logic_sc.IsItMine())
+     /*   if (appwarp_logic_sc.IsItMine())
             turn_msg.text = "Your turn - Place " + SgameInfo.max_number_of_ships +" battleships on your game board\n \t\tFirst of 4 squars \n\t\tSecond of 3 squars and so on";
 
         else
             turn_msg.text = "Opponent turn - Places " + SgameInfo.max_number_of_ships + " battleships on their game board";
-
+        */
         Debug.Log("done start in pbm");
     }
 
@@ -46,7 +46,7 @@ public class MultiplayerBoardManager : MonoBehaviour
         Debug.Log("MultiplayerBoardManager OnButtonPressed vector x " + btnPos.x + "vector y " + btnPos.y);
         //checking if boat structure is not complete yet and if it's the player's turn to build ship
 
-        if ((appwarp_logic_sc.IsItMine()) && (CheckStructure()))
+        if ((appwarp_logic_sc.IsItMine()) && (CheckStructure()==false))
         {
             if (allPlayerShips[curr_ship_indx].Set_Loc(btnPos))
             {
