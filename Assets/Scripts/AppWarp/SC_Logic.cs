@@ -39,6 +39,7 @@ public class SC_Logic : MonoBehaviour
     private BackroundMusic bckgrnd_music_sc;
 
     private Vector2 vc;
+    private Vector2 last_vec;
 
     void OnEnable()
     {
@@ -315,6 +316,11 @@ public class SC_Logic : MonoBehaviour
         SC_AppWarpKit.sendMove(str);
     }
 
+    public void Set_LastAttack_Vector(Vector2 vc)
+    {
+        last_vec = vc;
+    }
+
     private void ParseEnemyMove(string str)
     {
         Debug.Log("enemy move!!!!!!!!!!!!!!!!!!!!!!         " + str);
@@ -353,7 +359,7 @@ public class SC_Logic : MonoBehaviour
                     Debug.Log("previous attack attempt success");
                     Debug.Log("value of isMyTurn " + isMyTurn);
                     parseToVector(str);
-                    enemyPlayerBoard_script.MarkAttackResult(vc,true);
+                    enemyPlayerBoard_script.MarkAttackResult(last_vec, true);
                     myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";
                     Debug.Log("MakeMyMove MarkedAttackResult ");
                     MakeMyMove("MarkedAttackResult");
@@ -366,7 +372,7 @@ public class SC_Logic : MonoBehaviour
                         Debug.Log("previous attack attempt failed");
                         Debug.Log("value of isMyTurn " + isMyTurn);
                         parseToVector(str);
-                        enemyPlayerBoard_script.MarkAttackResult(vc, false);
+                        enemyPlayerBoard_script.MarkAttackResult(last_vec, false);
                         myPlayerBoard_script.turn_msg.text = "Your turn - Time to attack";
                         Debug.Log("MakeMyMove MarkedAttackResult ");
                         MakeMyMove("MarkedAttackResult");
