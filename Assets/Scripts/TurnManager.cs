@@ -53,7 +53,7 @@ public class TurnManager : MonoBehaviour
 	//coroutine to wait 10 seconds before restarting the level
 	private static IEnumerator Wait(){
 	
-		Debug.Log ("waiting for 10 seconds before restarting level");
+		//Debug.Log ("waiting for 10 seconds before restarting level");
 		yield return new WaitForSeconds (10.0f);
 		Application.LoadLevel ("Singleplayer");
 	}

@@ -16,7 +16,7 @@ public class EnemyBoardManager : MonoBehaviour {
 
 	void Start ()
 	{
-		Debug.Log ("start in ebm");
+		//Debug.Log ("start in ebm");
 		hit_Counter = 0;
 
         allAIships = new BattleShip[SgameInfo.max_number_of_ships];
@@ -26,10 +26,10 @@ public class EnemyBoardManager : MonoBehaviour {
             allAIships[i] = new BattleShip();
             allAIships[i].Init_Ship(SgameInfo.max_Ship_Size - i);
             place_Battleship(allAIships[i], SgameInfo.max_Ship_Size - i);
-            Debug.Log("ship sized created  " + (SgameInfo.max_Ship_Size - i));
+            //Debug.Log("ship sized created  " + (SgameInfo.max_Ship_Size - i));
         }
 
-        Debug.Log ("done start in ebm");
+        Debug.Log("done start in EnemyBoardManager");
 	}
 
     private void place_Battleship(BattleShip btshp,int ship_Size)
@@ -119,7 +119,7 @@ public class EnemyBoardManager : MonoBehaviour {
 
 			Vector2 btnPos = btn.GetComponent<ButtonInfo> ().position;
 
-			Debug.Log ("vector x " + btnPos.x + "vector y " + btnPos.y);
+			//Debug.Log ("vector x " + btnPos.x + "vector y " + btnPos.y);
 			//checking if boat structure is not complete yet and if it's the player's turn to attack
 
             if(GetAttackResult(btnPos)!=-1) 
@@ -142,11 +142,11 @@ public class EnemyBoardManager : MonoBehaviour {
 					        if (hit_Counter == SgameInfo.max_number_of_hits)
                             {
                                 TurnManager.Pwon = true;
-								Debug.Log ("game over - player won");
+								//Debug.Log ("game over - player won");
 								//winner code - 1 - player won
                                 TurnManager.RestartLevel(1);
 							}
-							Debug.Log("player's turn complete - change turn to PC");
+							//Debug.Log("player's turn complete - change turn to PC");
                             TurnManager.EndTurn(false, true);
 						}
 					}
@@ -163,7 +163,7 @@ public class EnemyBoardManager : MonoBehaviour {
 
 							b.image.color = new Color (Color.black.r, Color.black.g, Color.black.b, 1f);
 						}
-						Debug.Log("player's turn complete - change turn to PC");
+						//Debug.Log("player's turn complete - change turn to PC");
                         TurnManager.EndTurn(false, true);
 					}
 				}

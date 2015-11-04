@@ -29,13 +29,13 @@ public class PlayerBoardManager : MonoBehaviour
            allPlayerShips[i].Init_Ship(SgameInfo.max_Ship_Size-i);
         }
         
-        Debug.Log("done start in pbm");
+        //Debug.Log("done start in pbm");
     }
 
     public void OnButtonPressed(Button btn)
     {
         Vector2 btnPos = btn.GetComponent<ButtonInfo>().position;
-        Debug.Log("vector x " + btnPos.x + "vector y " + btnPos.y);
+        //Debug.Log("vector x " + btnPos.x + "vector y " + btnPos.y);
         //checking if boat structure is not complete yet and if it's the player's turn to build ship
 
         if ((TurnManager.Pturn) && (CheckStructure() == false))
@@ -55,7 +55,7 @@ public class PlayerBoardManager : MonoBehaviour
         {
             TurnManager.EndTurn(false, true);
             first_Completion = true;
-            Debug.Log("structure complete - change turn to PC");
+            //Debug.Log("structure complete - change turn to PC");
         }
     }
 
@@ -89,7 +89,7 @@ public class PlayerBoardManager : MonoBehaviour
                         if (hit_Counter == SgameInfo.max_number_of_hits)
                         {
                             TurnManager.AIwon = true;
-                            Debug.Log("game over - AI won");
+                            //Debug.Log("game over - AI won");
                             //winner code - 2 - AI won
                             TurnManager.RestartLevel(2);
                         }
@@ -121,7 +121,7 @@ public class PlayerBoardManager : MonoBehaviour
 
     public void PlayerMove()
     {
-        Debug.Log("player's turn now");
+       // Debug.Log("player's turn now");
     }
 
     private bool CheckStructure()

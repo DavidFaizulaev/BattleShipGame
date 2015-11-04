@@ -16,7 +16,7 @@ public class UI_Script : MonoBehaviour
 
     void Start ()
     {
-		Debug.Log ("load menu");
+        Debug.Log("load UI_Script");
     }
 
 	public void singlePlayerPress()

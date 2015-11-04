@@ -118,7 +118,7 @@ public class SC_Logic : MonoBehaviour
 
     public void OnExceptionFromApp42(Exception error)
     {
-        Debug.Log("onConnectToApp42: " + error.Message);
+        Debug.Log("onConnectToApp42: OnExceptionFromApp42  " + error.Message);
     }
 
     public void onConnectToAppWarp(ConnectEvent eventObj)
